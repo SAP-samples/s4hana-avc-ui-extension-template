@@ -1,7 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: <YOUR-REPO-NAME>
-Upstream-Contact: <YOUR-CONTACT (MAIL ADDRESS ETC.)>
-Source: <https://github.com/sap-samples/YOUR-REPO-NAME>
+Upstream-Name: s4hana-avc-ui-extension-template
+Upstream-Contact: florian.stephan01@sap.com
+Source: https://github.com/sap-samples/s4hana-avc-ui-extension-template
 Disclaimer: The code in this project may include calls to APIs ("API Calls") of
  SAP or third-party products or services developed outside of this project
  ("External Products").
@@ -24,14 +24,115 @@ Disclaimer: The code in this project may include calls to APIs ("API Calls") of
  you any rights to use or access any SAP External Product, or provide any third
  parties the right to use of access any SAP External Product, through API Calls.
 
-Files: <YOUR-FILE-OR-FOLDER-LIST>
-Copyright:  <YEARS-RELEVANT-FOR-YOUR-PROJECT> SAP SE or an SAP affiliate company and <YOUR-PROJECT-NAME> contributors
+Files: 
+CODE_OF_CONDUCT.md
+LICENSE
+README.md
+doc
+doc/IMPLEMENTATION.md
+doc/images
+doc/images/valuation_std.png
+doc/images/manage_characteristic_groups.png
+doc/images/mock_runtime.png
+doc/images/manage_vc_ui_extension.png
+doc/images/valuation_with_ui_extension.png
+doc/odata_schema
+doc/odata_schema/Characteristic_schema.xml
+doc/odata_schema/CharacteristicValue_schema.xml
+doc/api
+doc/api/control_StandardCharacteristic.js.html
+doc/api/CharacteristicGroupClientObject.js.html
+doc/api/module-sap_i2d_lo_lib_vchclf_api_valuation_CharacteristicGroupClientObject.html
+doc/api/index.html
+doc/api/controller_CustomCharacteristicGroupBase.controller.js.html
+doc/api/module-sap_i2d_lo_lib_vchclf_api_valuation_control_StandardCharacteristic.html
+doc/api/module-sap_i2d_lo_lib_vchclf_api_valuation_control_CharacteristicContextContainer.html
+doc/api/control_CustomCharacteristic.js.html
+doc/api/styles
+doc/api/styles/jsdoc-default.css
+doc/api/styles/prettify-tomorrow.css
+doc/api/styles/prettify-jsdoc.css
+doc/api/module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase.html
+doc/api/module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase_formatter.html
+doc/api/scripts
+doc/api/scripts/linenumber.js
+doc/api/scripts/prettify
+doc/api/scripts/prettify/lang-css.js
+doc/api/scripts/prettify/prettify.js
+doc/api/scripts/prettify/Apache-License-2.0.txt
+doc/api/module-sap_i2d_lo_lib_vchclf_api_valuation_control_CustomCharacteristic.html
+doc/api/control_CharacteristicContextContainer.js.html
+doc/api/fonts
+doc/api/fonts/OpenSans-BoldItalic-webfont.eot
+doc/api/fonts/OpenSans-Light-webfont.svg
+doc/api/fonts/OpenSans-Regular-webfont.woff
+doc/api/fonts/OpenSans-Bold-webfont.svg
+doc/api/fonts/OpenSans-Bold-webfont.woff
+doc/api/fonts/OpenSans-Regular-webfont.svg
+doc/api/fonts/OpenSans-Italic-webfont.woff
+doc/api/fonts/OpenSans-Italic-webfont.svg
+doc/api/fonts/OpenSans-LightItalic-webfont.eot
+doc/api/fonts/OpenSans-Italic-webfont.eot
+doc/api/fonts/OpenSans-LightItalic-webfont.svg
+doc/api/fonts/OpenSans-Regular-webfont.eot
+doc/api/fonts/OpenSans-Light-webfont.woff
+doc/api/fonts/OpenSans-LightItalic-webfont.woff
+doc/api/fonts/OpenSans-BoldItalic-webfont.svg
+doc/api/fonts/OpenSans-Light-webfont.eot
+doc/api/fonts/OpenSans-Bold-webfont.eot
+doc/api/fonts/OpenSans-BoldItalic-webfont.woff
+package.json
+ui5-local.yaml
+ui5.yaml
+webapp
+webapp/mockdata
+webapp/mockdata/robot_reach_cstics.json
+webapp/mockdata/robot_commonData_cstics.json
+webapp/index.html
+webapp/utils
+webapp/utils/locate-reuse-libs.js
+webapp/controller
+webapp/controller/RobotReach.controller.js
+webapp/controller/RobotCommonData.controller.js
+webapp/libs
+webapp/libs/api
+webapp/libs/api/launcher
+webapp/libs/api/launcher/css
+webapp/libs/api/launcher/css/style.css
+webapp/libs/api/launcher/controller
+webapp/libs/api/launcher/controller/App.controller.js
+webapp/libs/api/launcher/controller/Selector.controller.js
+webapp/libs/api/launcher/model
+webapp/libs/api/launcher/model/models.js
+webapp/libs/api/launcher/view
+webapp/libs/api/launcher/view/App.view.xml
+webapp/libs/api/launcher/view/Selector.view.xml
+webapp/libs/api/valuation
+webapp/libs/api/valuation/CharacteristicGroupClientObject.js
+webapp/libs/api/valuation/controller
+webapp/libs/api/valuation/controller/CustomCharacteristicGroupBase.controller.js
+webapp/libs/api/valuation/control
+webapp/libs/api/valuation/control/CharacteristicContextContainer.js
+webapp/libs/api/valuation/control/Characteristic.js
+webapp/libs/api/valuation/control/CustomCharacteristic.js
+webapp/libs/api/valuation/control/StandardCharacteristic.js
+webapp/libs/api/valuation/CustomDataConstants.js
+webapp/Component.js
+webapp/img
+webapp/img/RoboticArm.png
+webapp/img/AVC_RBT_APPLICATION
+webapp/img/AVC_RBT_APPLICATION/01.png
+webapp/img/AVC_RBT_APPLICATION/02.png
+webapp/manifest.json
+webapp/view
+webapp/view/robot_commonData.view.xml
+webapp/view/robot_reach.view.xml
+webapp/view/fragment
+webapp/view/fragment/robotReachSummaryDialog.fragment.xml
+webapp/view/fragment/valueHelpDialogWithImage.fragment.xml
+webapp/i18n
+webapp/i18n/i18n.properties
+
+Copyright:  2022 SAP SE or an SAP affiliate company and s4hana-avc-ui-extension-template contributors
 License: Apache-2.0
 
-Files: <THIRD-PARTY-FILE-OR-FOLDER-LIST>
-Copyright: <COPYRIGHT-OF-THIRD-PARTY-CODE>
-License: <LICENSE-OF-THIRD-PARTY-CODE>
-
-Files: <ANOTHER-THIRD-PARTY-FILE-OR-FOLDER-LIST>
-Copyright: <COPYRIGHT-OF-ANOTHER-THIRD-PARTY-CODE>
-License: <LICENSE-OF-ANOTHER- THIRD-PARTY-CODE>
