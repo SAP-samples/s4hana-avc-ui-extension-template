@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: control/CustomCharacteristic.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: control/CustomCharacteristic.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * ${copyright}
+ */
+
+sap.ui.define([
+	"sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer",
+	"sap/i2d/lo/lib/vchclf/components/valuation/control/characteristic/CharacteristicValueProcessorManager"
+], function (CharacteristicContextContainer, CharacteristicValueProcessorManager) {
+	"use strict";
+
+	/**
+     * Represents a Custom Characteristic within a VC UI Extension view. The custom visualization needs to be placed in aggregation &lt;code>content&lt;/code> and can make use of available
+	 * UI5 or own controls. Each instance has a &lt;code>CharacteristicValueProcessor&lt;/code> attached that becomes involved as soon as a value assignment
+	 * should be performed. This processor is decoupled from the actual control representation and implictly used when a generic event handler of 
+	 * {@link module:sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase}
+	 * is called.
+     *
+     * @public
+     * @author I517211
+     * @since 1.0.0
+     * @extends module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer
+     * 
+	 * @module sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic
+     */
+	return CharacteristicContextContainer.extend("sap.i2d.lo.lib.vchclf.api.valuation.control.CustomCharacteristic", { /** @alias module:sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic */
+		
+		renderer: function (oRm, oControl) {
+			CharacteristicContextContainer.prototype.getRenderer().render(oRm, oControl);
+		},
+		
+		attachProcessor: function(oCsticData) {
+			var oGroupController = this.getGroupController();
+			var oGroupClientObject = oGroupController.getCharacteristicGroupClientObject();
+			var sTypeId = this.getRegistrationId();
+			if (!CharacteristicValueProcessorManager.hasProcessorById(sTypeId)) {
+				var oProcessor = CharacteristicValueProcessorManager.createProcessorWithId(sTypeId, oGroupClientObject.getValuationComponent().getView());
+				
+				var oValuationComp = oGroupClientObject.getValuationComponent();
+				var oViewModel = oValuationComp.getViewModel();
+				var iGroupIndex = oViewModel.getGroupIndexById(oCsticData.GroupId);
+				var sPath = oViewModel.getCharacteristicPathById(oCsticData.CsticId,iGroupIndex);
+				
+				var oGroupBindingContext = oGroupClientObject.getOriginGroupContext();
+				oProcessor.init(CharacteristicValueProcessorManager, oGroupBindingContext, sPath, sTypeId, oViewModel, oValuationComp.getModel("valuationSettings"), oValuationComp.getValuationDAO(), oValuationComp.getEmbedderName(), oValuationComp.getGroupRepresentation());
+				
+				oGroupController.attachProcessorEvents(oProcessor);
+			}
+		},
+		
+		getProcessor: function() {
+			var sTypeId = this.getRegistrationId();
+			return CharacteristicValueProcessorManager.getProcessorById(sTypeId);
+		},
+		
+		onDataLoaded: function() {
+			var oData = this.getBindingContext("view").getObject();
+			this.attachProcessor(oData);
+		}
+	
+	});
+	
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_CharacteristicGroupClientObject.html">sap/i2d/lo/lib/vchclf/api/valuation/CharacteristicGroupClientObject</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CharacteristicContextContainer.html">sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CustomCharacteristic.html">sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_StandardCharacteristic.html">sap/i2d/lo/lib/vchclf/api/valuation/control/StandardCharacteristic</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase.html">sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase_formatter.html">sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase/formatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Fri Jul 29 2022 11:46:35 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

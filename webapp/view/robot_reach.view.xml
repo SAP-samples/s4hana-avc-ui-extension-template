@@ -1,0 +1,201 @@
+<!-- 
+  	This is a custom view for Characteristic Group 'AVC_RBT_REACH' of Product 'AVC_RBT_ROBOT2'. Shown Characteristics are:
+    
+    AVC_RBT_RMIN_REQ		Reach (Minimum) - Requested			
+	AVC_RBT_RMAX_REQ		Reach (Maximum) - Requested			
+	AVC_RBT_RMIN_TECH		Reach (Minimum) - Technical			
+	AVC_RBT_RMAX_TECH		Reach (Maximum) - Technical			
+	AVC_RBT_LEN_LINKARM		Length of Link Arm	
+	AVC_RBT_LEN_DRIVEARM	Length of Drive Arm
+	
+	* The corresponding mockdata is found in ./mockdata/robot_reach_cstics.json
+	* It illustrates an absolute Layout with Standard and Custom Characteristic controls
+ -->
+<mvc:View
+	controllerName="z.vc.ui.ext.controller.RobotReach"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" 
+	xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout" 
+	xmlns:api="sap.i2d.lo.lib.vchclf.api.valuation.control"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	>
+	<html:style>
+   <html:style>
+		.AVC_RBT_RMIN_REQ_pos {
+			display: inline-block!important;
+	 		position: absolute;
+    		left: 50px;
+    		top: 50px;
+		}
+		.AVC_RBT_RMAX_REQ_pos {
+			display: inline-block!important;
+   			position: absolute;
+    		top: 140px;
+    		left: 50px;
+		}
+		.AVC_RBT_RMIN_TECH_pos {
+			display: inline-block!important;
+    		position: absolute;
+    		left: 380px;
+    		top: 50px;
+    		width: 200px;
+		}
+		.AVC_RBT_RMAX_TECH_pos {
+			display: inline-block!important;
+    		position: absolute;
+    		left: 380px;
+    		top: 140px;
+    		width: 200px;
+		}
+		.AVC_RBT_LEN_DRIVEARM_pos {
+			display: inline-block!important;
+    		position: absolute;
+    		left: 500px;
+    		top: 260px;
+    		width: 200px;
+    		z-index: 3;
+		}
+		.AVC_RBT_LEN_LINKARM_pos {
+			display: inline-block!important;
+    		position: absolute;
+    		left: 80px;
+    		top: 380px;
+    		z-index: 2;
+		}
+		.AVC_RBT_IMAGE_pos {
+    		display: inline-block!important;
+    		position: absolute;
+    		left: 220px;
+    		top: 230px;
+    		width: 300px;
+    		z-index: 1;
+		}
+ 	</html:style>
+       </html:style>
+	<VBox width="100%" class="sapUiSmallMargin">
+		<layout:VerticalLayout class="AVC_RBT_RMIN_REQ_pos">
+			<!-- 
+				This represents the Custom Representation for Characteristic AVC_RBT_RMIN_REQ. The allowed values are described via an interval Domain Value. As this numeric Characteristic should be visualized with a Slider,
+			    for 'min' and 'max' information this Domain Value must be loaded ('loadDomainValues' equals "true"). The currently assigned value is represented via the actual value of the Slider.
+		 	-->
+			<api:CustomCharacteristic name="AVC_RBT_RMIN_REQ" loadDomainValues="true" removeNoneValue="true" >
+				<layout:VerticalLayout>
+					<!--  Represents the label of the Characteristic. Since it should also allow to switch the Inspector to the corresponding Characteristic, a Link Control is used. The 'press' event
+					  is therefore bound to the generic event handler function 'onShowInInspectorByCharcContext'. This function shows the Characteristic derived from the implicitly available 'view' context.
+                      Therefore it can only be used as event handler for controls that are bound to a Characteristic context.					  
+				 	-->
+					<Link text="{view>Description}" press=".onShowInInspectorByCharcContext"/>
+					<!-- The slider representing the root control of this Characteristic. When the user interacts with the slider, the generic event handler function 'onApplyByCharcContext' will be called by the change event. -->
+					<Slider
+						min="{
+							parts: ['view>DomainValues',
+								'customView_i18n>FIELD_NAME_TECHNICAL_VALUE_FROM'
+							],
+							formatter: '.formatter.getNumericFieldOfFirstValue'
+						}"
+						max="{
+							parts: ['view>DomainValues',
+								'customView_i18n>FIELD_NAME_TECHNICAL_VALUE_TO'
+							],
+							formatter: '.formatter.getNumericFieldOfFirstValue'
+						}"
+						value="{
+							parts: ['view>AssignedValues',
+								'customView_i18n>FIELD_NAME_TECHNICAL_VALUE'
+							],
+							formatter: '.formatter.getNumericFieldOfFirstValue'
+						}"
+						enableTickmarks="true" step="5" change=".onApplyByCharcContext">
+						<!-- With this custom data the generic event handler 'onApplyByCharcContext' is parametrized to determine the technical value for an assignment from parameter 'value' in the origin event. -->
+						<customData>
+							<core:CustomData key="eventParameter" value="value"/>
+						</customData>
+					</Slider>
+				</layout:VerticalLayout>
+			</api:CustomCharacteristic>
+		</layout:VerticalLayout>
+		<layout:VerticalLayout class="AVC_RBT_RMAX_REQ_pos">
+			<!-- 
+				This represents the Custom Representation for Characteristic AVC_RBT_RMAX_REQ. The allowed values are described via an interval Domain Value. As this numeric Characteristic should be visualized with a Slider,
+			    for 'min' and 'max' information this Domain Value must be loaded ('loadDomainValues' equals "true"). The currently assigned value is represented via the actual value of the Slider.
+		 	-->
+			<api:CustomCharacteristic name="AVC_RBT_RMAX_REQ" loadDomainValues="true" removeNoneValue="true" >
+				<layout:VerticalLayout>
+					<!--  Represents the label of the Characteristic. Since it should also allow to switch the Inspector to the corresponding Characteristic, a Link Control is used. The 'press' event
+					  is therefore bound to the generic event handler function 'onShowInInspectorByCharcContext'. This function shows the Characteristic derived from the implicitly available 'view' context.
+                      Therefore it can only be used as event handler for controls that are bound to a Characteristic context.					  
+				 	-->
+					<Link text="{view>Description}" press=".onShowInInspectorByCharcContext"/>
+					<!-- The slider representing the root control of this Characteristic. When the user interacts with the slider, the generic event handler function 'onApplyByCharcContext' will be called by the change event. -->
+					<Slider
+						min="{
+							parts: ['view>DomainValues',
+								'customView_i18n>FIELD_NAME_TECHNICAL_VALUE_FROM'
+							],
+							formatter: '.formatter.getNumericFieldOfFirstValue'
+						}"
+						max="{
+							parts: ['view>DomainValues',
+								'customView_i18n>FIELD_NAME_TECHNICAL_VALUE_TO'
+							],
+							formatter: '.formatter.getNumericFieldOfFirstValue'
+						}"
+						value="{
+							parts: ['view>AssignedValues',
+								'customView_i18n>FIELD_NAME_TECHNICAL_VALUE'
+							],
+							formatter: '.formatter.getNumericFieldOfFirstValue'
+						}"
+						enableTickmarks="true" step="5" change=".onApplyByCharcContext">
+						<!-- With this custom data the generic event handler 'onApplyByCharcContext' is parametrized to determine the technical value for an assignment from parameter 'value' in the origin event. -->
+						<customData>
+							<core:CustomData key="eventParameter" value="value"/>
+						</customData>
+					</Slider>
+				</layout:VerticalLayout>
+			</api:CustomCharacteristic>
+		</layout:VerticalLayout>
+		<layout:VerticalLayout class="AVC_RBT_RMIN_TECH_pos">
+			<!-- 
+				This represents the Characteristic AVC_RBT_RMIN_TECH using the Standard Characteristic Control. It will be rendered as in the standard Grid without an UI Extension. The Label is included and
+				all event handling is automatically in place.
+		 	-->
+			<api:StandardCharacteristic name="AVC_RBT_RMIN_TECH"/>
+		</layout:VerticalLayout>
+		<layout:VerticalLayout class="AVC_RBT_RMAX_TECH_pos">
+			<!-- 
+				This represents the Characteristic AVC_RBT_RMAX_TECH using the Standard Characteristic Control. It will be rendered as in the standard Grid without an UI Extension. The Label is included and
+				all event handling is automatically in place.
+		 	-->
+			<api:StandardCharacteristic name="AVC_RBT_RMAX_TECH"/>
+			</layout:VerticalLayout>
+		<layout:VerticalLayout class="AVC_RBT_LEN_DRIVEARM_pos">
+			<!-- 
+				This represents the Characteristic AVC_RBT_LEN_DRIVEARM using the Standard Characteristic Control. It will be rendered as in the standard Grid without an UI Extension. The Label is included and
+				all event handling is automatically in place.
+		 	-->
+			<api:StandardCharacteristic name="AVC_RBT_LEN_DRIVEARM"/>
+		</layout:VerticalLayout>
+		<layout:VerticalLayout class="AVC_RBT_LEN_LINKARM_pos">
+			<!-- 
+				This represents the Characteristic AVC_RBT_LEN_LINKARM using the Standard Characteristic Control. It will be rendered as in the standard Grid without an UI Extension. The Label is included and
+				all event handling is automatically in place.
+		 	-->
+			<api:StandardCharacteristic name="AVC_RBT_LEN_LINKARM"/>
+		</layout:VerticalLayout>
+		<layout:VerticalLayout>
+			<!-- Image representing the Robot arm in the center of the page. Characteristics are arranged around. For obtaining the correct resource URL, the provided 'getImageResourceUrl' formatter function is used. -->
+			<Image src="{
+				parts: ['customView_i18n>IMG_URL_AVC_RBT'],
+				formatter: '.formatter.getImageResourceUrl' }"
+			class="AVC_RBT_IMAGE_pos">
+		</Image>
+		<!-- 
+			Link to launch an assignment summary dialog - robotReachSummaryDialog.fragment.xml. The dialog shows how Characteristics assignment data can be directly bound to readonly controls without using a CustomCharacteristic control. 
+			This allows to process multiple Characteristics for a summary.
+		-->
+		<Link text="Show Summary" press="onPressShowSummary"></Link>
+		</layout:VerticalLayout>
+	</VBox>
+</mvc:View>

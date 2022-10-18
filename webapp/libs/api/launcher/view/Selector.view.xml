@@ -1,0 +1,10 @@
+<mvc:View controllerName="sap.i2d.lo.lib.vchclf.api.launcher.controller.Selector"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    xmlns:mvc="sap.ui.core.mvc" displayBlock="true"
+    xmlns="sap.m"
+    xmlns:layout="sap.ui.layout"
+    >
+   		<layout:VerticalLayout id="vLayout">
+   		
+   		</layout:VerticalLayout>
+</mvc:View>

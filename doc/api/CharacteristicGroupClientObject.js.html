@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: CharacteristicGroupClientObject.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: CharacteristicGroupClientObject.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/*
+ * ${copyright}
+ */
+
+sap.ui.define([
+	"sap/ui/base/ManagedObject",
+	"sap/i2d/lo/lib/vchclf/common/util/Logger",
+	"sap/i2d/lo/lib/vchclf/components/valuation/control/characteristic/CharacteristicValueProcessorManager"
+], function(ManagedObject, Logger, CharacteristicValueProcessorManager) {
+	"use strict";
+
+	/**
+     * Implementation of the Characteristic Group Client API. Each VC UI Extension view controller (which needs to be derived from
+	 * {@link module:sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase}
+     * ) owns an instance of this object and has access. It allows to retrieve Characteristic data independent of the context to
+	 * which a {@link module:sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic}
+	 * is bound. Furthermore loading of Domain Values can be manally triggered (e.g. for an custom Value Help implementation) and
+	 * value assignments can be made. This is especially helpfull when it comes to own event handler implementations if the
+	 * provided ones are not sufficient.
+     *
+     * @public
+     * @author I517211
+     * @since 1.0.0
+     * @extends sap.ui.core.ManagedObject
+     * 
+	 * @module sap/i2d/lo/lib/vchclf/api/valuation/CharacteristicGroupClientObject
+     */
+	return ManagedObject.extend("sap.i2d.lo.lib.vchclf.api.valuation.CharacteristicGroupClientObject", { /** @alias module:sap/i2d/lo/lib/vchclf/api/valuation/CharacteristicGroupClientObject */
+
+		_oValuationClientObjectManager: null,
+		_oContext: null,
+		_oOriginContext: null,
+		_mCsticId2Name: null,
+		_mCsticControls: null,
+		_sNamespace: null,
+		_oController: null,
+
+		constructor: function(oValuationClientObjectManager, oContext) {
+			ManagedObject.prototype.constructor.apply(this);
+			this._oValuationClientObjectManager = oValuationClientObjectManager;
+			this._oOriginContext = oContext;
+			var sPath = oContext.getPath();
+			sPath = sPath.replace(/CharacteristicsGroups/g, "CharacteristicsGroupsCustom");
+			var oViewModel = this._oValuationClientObjectManager.getValuationComponent().getModel("view");
+			this._oContext = oViewModel.createBindingContext(sPath);
+			this._mCsticControls = {};
+			this._mCsticId2Name = {};
+			this._oValuationClientObjectManager.getValuationComponent().attachCharacteristicAssignmentTriggered(this.onCharacteristicAssignmentTriggered, this);
+			this._oValuationClientObjectManager.getValuationComponent().attachFilterApplied(this.onFilterApplied, this);
+			oViewModel.attachCustomGroupTransformed(this.onCustomGroupTransformed, this);
+		},
+		
+		destroy: function() {
+			this._oValuationClientObjectManager.getValuationComponent().detachCharacteristicAssignmentTriggered(this.onCharacteristicAssignmentTriggered, this);
+			this._oValuationClientObjectManager.getValuationComponent().detachFilterApplied(this.onFilterApplied, this);
+			oViewModel.detachCustomGroupTransformed(this.onCustomGroupTransformed, this);
+			
+			ManagedObject.prototype.destroy.apply(this);
+		},
+		
+		/**
+		 * Returns the group context from the customGroups path where Characteristics are arranged by their name
+		 * @returns {object}
+		 * @ignore
+		 */
+		getCustomGroupContext: function() {
+			return this._oContext;
+		},
+		
+		/**
+		 * Returns the standard group context
+		 * @returns {object}
+		 * @ignore
+		 */
+		getOriginGroupContext: function() {
+			return this._oOriginContext;
+		},
+		
+		/**
+		 * Returns the Characteristic name for the given Characteristic id
+		 * @param {string} sCsticId - the Characteristic id
+		 * @returns {string}
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		getCharacteristicName: function(sCsticId) {
+			return this._mCsticId2Name[sCsticId];
+		},
+		
+		/**
+		 * Returns the Characteristic data object for the given Characteristic name
+		 * @param {string} sCsticName - the Characteristic name 
+		 * @returns {object}
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		getCharacteristicData: function(sCsticName) {
+			var oGroup = this._oContext.getObject();
+			if (oGroup.Characteristics) {
+				return oGroup.Characteristics[sCsticName];
+			} else {
+				return null;
+			}
+		},
+		
+		/**
+		 * Returns the index of the given Characteristic in the origin context
+		 * @param {string} sCsticName 
+		 * @returns {int}
+		 * @ignore
+		 */
+		_getCharacteristicIndex: function(sCsticName) {
+			var oGroup = this._oOriginContext.getObject();
+			if (oGroup.Characteristics) {
+				return oGroup.Characteristics.findIndex(function(oCstic) {
+					return oCstic.Name === sCsticName;
+				});
+			} else {
+				return -1;
+			}
+		},
+		
+		/**
+		 * Returns if the given Characteristic is part of the Characteristic Group to which this instance of the Characteristic Group Client object is bound
+		 * &lt;code>true&lt;/code> if the Characteristic is contained, &lt;code>false&lt;/code> otherwise
+		 * @param {string} sCsticName - the Characteristic name 
+		 * @returns {boolean}
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		hasCharacteristic: function(sCsticName) {
+			for (var sCsticId in this._mCsticId2Name) {
+				if (this._mCsticId2Name[sCsticId] === sCsticName) {
+					return true;
+				}
+			}
+			return false;
+		},
+		
+		/**
+		 * Selects the given Characteristic - the inspector will then show the details of the selected Characteristic
+		 * @param {string} sCsticName - the Characteristic name
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		selectCharacteristic: function(sCsticName) {
+			var oData = this.getCharacteristicData(sCsticName);
+			if (oData) {
+				var oValuationComp = this.getValuationComponent();
+				var oDataModel = oValuationComp.getModel("vchclf");
+				var sPath = oDataModel.createKey("/CharacteristicSet", oData);
+				oValuationComp.fireCharacteristicSelected({
+					path: sPath
+				});
+			}
+		},
+		
+		/**
+		 * Registers the given control
+		 * @param {module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer} oControl
+		 * @instance
+		 * @ignore
+		 */
+		setCustomCharacteristicControl: function(oControl) {
+			this._mCsticControls[oControl.getRegistrationId()] = oControl;
+			this.getValuationComponent().getModel("view").setKeepDomainValues(oControl.getName(), oControl.getKeepDomainValues());
+		},
+		
+		/**
+		 * Removes the given control from registration
+		 * @param {module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer} oControl
+		 * @instance
+		 * @ignore
+		 */
+		removeCustomCharacteristicControl: function(oControl) {
+			delete this._mCsticControls[oControl.getRegistrationId()];
+			this.getValuationComponent().getModel("view").setKeepDomainValues(oControl.getName(), false);
+		},
+		
+		/**
+		 * Sets the controller and namespace to which this instance is linked
+		 * @param {module:sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase} oController - the controller
+		 * @param {string} sNamespace - the namespace
+		 * @instance
+		 * @ignore
+		 */
+		setController: function(oController, sNamespace) {
+			this._oController = oController;
+			this._sNamespace = sNamespace;
+		},
+		
+		/**
+		 * Returns the Valuation Component
+		 * @returns {sap.i2d.lo.lib.vchclf.components.valuation.Component}
+		 * @instance
+		 * @ignore
+		 */
+		getValuationComponent: function() {
+			return this._oValuationClientObjectManager.getValuationComponent();
+		},
+		
+		/**
+		 * Returns a deployment specific URL for the given relative path starting from the project root folder
+		 * @param {string} sPath - the path
+		 * @returns {string}
+		 * @public
+		 * @instance
+		 * @since 1.0.0
+		 */
+		getResourceUrl: function(sPath) {
+			if (sPath.charAt(0) !== "/") {
+				sPath = "/" + sPath;  
+			}
+			return sap.ui.require.toUrl(this._sNamespace + sPath);
+		},
+		
+		/**
+		 * Initializes the Characteristics map and the corresponding controls from the custom group context considering maybe changed visibilty
+		 * @instance
+		 * @ignore
+		 */
+		initCsticsMap: function() {
+			var oGroup = this.getCustomGroupContext().getObject();
+			this._mCsticId2Name = {};
+			var sCsticId;
+			if (oGroup.Characteristics) {
+				for (var name in oGroup.Characteristics) {
+					sCsticId = oGroup.Characteristics[name].CsticId;
+					this._mCsticId2Name[sCsticId] = name;
+				}
+				
+				var sCstic;
+			
+				for (var sControlId in this._mCsticControls) {
+					sCstic = this._mCsticControls[sControlId].getName();
+					// cstic is filtered out -> set control invisible
+					if (!this.getCharacteristicData(sCstic) || this.getCharacteristicData(sCstic).IsHidden) {
+						this._mCsticControls[sControlId].setVisible(false);
+						this._mCsticControls[sControlId].getParent().rerender();
+					} else {
+						this._mCsticControls[sControlId].setVisible(true);
+						this._mCsticControls[sControlId].onDataLoaded();
+					}
+				}
+			}
+		},
+		
+		/**
+		 * Loads the Domain Values for all Characteristic Container Controls considering the properties &lt;code>loadDomainValues&lt;/code> and
+		 * &lt;code>keepDomainValues&lt;/code>
+		 * @param {sap.ui.core.Control} oBusyControl - the control which should be set busy while loading
+		 * @param {boolean} bAssignment - whether the load has been triggered by an assignment; in initial case no Domain Values can be kept as nothing is available
+		 * @returns {Promise} - a Promise which is resolved after loading has finished
+		 * @instance
+		 * @ignore
+		 */
+		loadDomainValuesForAllCustomControlsIfNeeded: function(oBusyControl, bAssignment) {
+			var oControl;
+			var aPromises = [];
+			var mCsticNames = {};
+			var sCstic;
+			for (var sControlId in this._mCsticControls) {	
+				oControl = this._mCsticControls[sControlId];
+				sCstic = oControl.getName();
+				// as there can be multiple controls referring to the same cstic, load domain values only once per cstic
+				if (this.hasCharacteristic(sCstic) &amp;&amp; !mCsticNames[sCstic] &amp;&amp; oControl.getLoadDomainValues() &amp;&amp; oControl.getVisible()) {
+					if (!bAssignment || !oControl.getKeepDomainValues()) {
+						aPromises.push(this.loadDomainValues(oControl));
+						mCsticNames[sCstic] = true;
+					}
+				}
+			}
+			var oCompletePromise = Promise.all(aPromises);
+			if (aPromises.length > 0 &amp;&amp; oBusyControl) {
+				oBusyControl.setBusyIndicatorDelay(0);
+				oBusyControl.setBusy(true);
+			}
+			oCompletePromise.finally(function() {
+				if (oBusyControl) {
+					oBusyControl.setBusy(false);
+				}
+			});
+			return oCompletePromise;
+		},
+		
+		/**
+		 * Loads the Domain Values for the Characteristic bound to the given CharacteristicContextContainer control
+		 * @param {module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer} oControl 
+		 * @returns {Promise} - a Promise which is resolved when loading is finished
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		loadDomainValues: function(oControl) {
+			var iCsticIndex = this._getCharacteristicIndex(oControl.getName());
+			var oCsticInOriginContext = this._oOriginContext.getObject().Characteristics[iCsticIndex];
+			var oPromise = this.getValuationComponent().getValuationDAO().loadAlternativeValues(oCsticInOriginContext);
+			oPromise.then(function() {
+				if (oControl.getRemoveNoneValue()) {
+					var aDomainValues = oControl.getBindingContext("view").getObject().DomainValues;
+					if (aDomainValues[0].ValueId==="") {
+						aDomainValues.splice(0,1);
+					}
+				}
+			}.bind(this));
+			return oPromise;
+		},
+		
+		/**
+		 * Applies the given technical values to the Characteristic bound to the specified CharacteristicContextContainer control
+		 * @param {module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer} oCsticContextContainerControl - the CharacteristicContextContainer control for which values should be applied
+		 * @param {string[]} aTechnicalValues - the technical values as strings
+		 * @returns {Promise} - a Promise which is resolved when the values have been applied
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		applyValues: function(oCsticContextContainerControl, aTechnicalValues) {
+			var oProcessor = oCsticContextContainerControl.getProcessor();
+			var oApplyPromise;
+			if (aTechnicalValues.length === 1) {
+				oApplyPromise = oProcessor.applyValue(aTechnicalValues[0], [], null, false);
+			} else {
+				oApplyPromise = oProcessor.applyValue("", aTechnicalValues, null, false);
+			}
+			return oApplyPromise;
+		},
+		
+		/**
+		 * Applies the default values of the Characteristic bound to the specified CharacteristicContextContainer control
+		 * @param {module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer} oCsticContextContainerControl - the CharacteristicContextContainer control for which default values should be applied
+		 * @returns {Promise} - a Promise which is resolved when the values have been applied
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		applyDefaultValues: function(oCsticContextContainerControl) {
+			var oProcessor = oCsticContextContainerControl.getProcessor();
+			oApplyPromise = oProcessor.applyDefaultValues();
+			return oApplyPromise;
+		},
+
+		/**
+		 * Refreshes the UI by resuming the custom group bindings
+		 * @ignore
+		 * @instance
+		 */
+		refresh: function() {
+			CharacteristicValueProcessorManager.doWhenBackendRequestsAreCompleted().then(function() {
+				if (this._oController &amp;&amp; this._oController.beforeRefresh) {
+					this._oController.beforeRefresh();
+				}
+				// refresh all custom group bindings to force formatters to run again when all data is there 
+				this._suspendOrResumeCustomGroupBindings(false);
+			}.bind(this));
+		},
+		
+		/**
+		 * Suspend or resumes all bindings that have &lt;code>CharacteristicsGroupsCustom&lt;/code> in their path
+		 * @param {boolean} bSuspend - &lt;code>true&lt;/code> in case of suspend, &lt;code>false&lt;/code> means resume
+		 * @instance
+		 * @ignore
+		 */
+		_suspendOrResumeCustomGroupBindings: function(bSuspend) {
+			var aBindings = this.getValuationComponent().getModel("view").getBindings();
+			aBindings.forEach(function(oBinding) {
+				if (oBinding.getContext() &amp;&amp; oBinding.getContext().getPath().indexOf("CharacteristicsGroupsCustom") > -1) {
+					if (bSuspend) {
+						oBinding.suspend();
+					} else {
+						oBinding.resume();
+					}
+				}
+			}.bind(this));
+		},
+		
+		/**
+		 * Eventhandler for the 'customGroupTransformed' event of the ViewModel. Used for initialization of the internal Characteristics map.
+		 * @param {sap.ui.base.Event} oEvent - the Event object
+		 * @instance
+		 * @ignore
+		 */
+		onCustomGroupTransformed: function(oEvent) {
+			var oGroup = oEvent.getParameter("group");
+			var bChanged = oEvent.getParameter("changed");
+			if (oGroup.GroupId === this._oOriginContext.getObject().GroupId &amp;&amp; bChanged) {
+				this.initCsticsMap();
+			}
+		},
+		
+		/**
+		 * Eventhandler for the 'filterApplied' event of the Valuation Component. Used to inform the controller about a filter change to then potentially reload Domain Values.
+		 * @param {sap.ui.base.Event} oEvent - the Event object
+		 * @instance
+		 * @ignore
+		 */
+		onFilterApplied: function(oEvent) {
+			var iGroupId = oEvent.getParameter("groupId");
+			if (this.getCustomGroupContext().getObject() &amp;&amp; this.getCustomGroupContext().getObject().GroupId === iGroupId) {
+				this._oController.onFilterApplied();
+			}
+		},
+		
+		/**
+		 * Eventhandler for the 'characteristicAssignmentTriggered' event of the Valuation Component. Used to supend bindings and
+		 * inform the controller to evaluate necessary Domain Values reload activities. The bindings are resumed after the Domain
+		 * Values loading promise is resolved. This optimizes the number communicated binding changes and renderings as the Characteristics
+		 * data structure is visited several times while transformation of a custom group.
+		 * 
+		 * @param {sap.ui.base.Event} oEvent - the Event object
+		 * @instance
+		 * @ignore
+		 */
+		onCharacteristicAssignmentTriggered: function(oEvent) {
+			var sCharacteristicPath = oEvent.getParameter("characteristicPath");
+			var oCharacteristicData = this.getValuationComponent().getModel("vchclf").getProperty(sCharacteristicPath);
+			if (this._oController &amp;&amp; this._oController.onCharacteristicAssignmentTriggered &amp;&amp; this._mCsticId2Name[oCharacteristicData.CsticId]) {
+				// suspend custom group bindings until refresh is explictely called
+				this._suspendOrResumeCustomGroupBindings(true);
+				this._oController.onCharacteristicAssignmentTriggered(oCharacteristicData.Name);
+			}
+		}
+		
+
+	});
+	
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_CharacteristicGroupClientObject.html">sap/i2d/lo/lib/vchclf/api/valuation/CharacteristicGroupClientObject</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CharacteristicContextContainer.html">sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CustomCharacteristic.html">sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_StandardCharacteristic.html">sap/i2d/lo/lib/vchclf/api/valuation/control/StandardCharacteristic</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase.html">sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase_formatter.html">sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase/formatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Fri Jul 29 2022 11:46:35 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

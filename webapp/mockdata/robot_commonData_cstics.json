@@ -1,0 +1,129 @@
+{
+	"Characteristics": {
+		"AVC_RBT_SLA": {
+			"CsticId": "0000108305",
+			"Name": "AVC_RBT_SLA",
+			"Description": "Service level agreement",
+			"Unit": "",
+			"IsRequired": true,
+			"IsSingleValued": true,
+			"AssignedValues": [
+				{
+					"CsticId": "0000108305",
+					"ValueId": "0000000001",
+					"Description": "No SLA agreement",
+					"IsDefaultValue": true,
+					"TechnicalValue": "0",
+					"IsSelected": true
+				}
+			],
+			"DomainValues": [
+				{
+					"CsticId": "0000108305",
+					"ValueId": "0000000001",
+					"Description": "No SLA agreement",
+					"IsDefaultValue": true,
+					"TechnicalValue": "0",
+					"IsSelected": true
+				},
+				{
+					"CsticId": "0000108305",
+					"ValueId": "0000000002",
+					"Description": "8h at five days a week",
+					"IsDefaultValue": false,
+					"TechnicalValue": "1",
+					"IsSelected": false
+				},
+				{
+					"CsticId": "0000108305",
+					"ValueId": "0000000003",
+					"Description": "24h at five days a week",
+					"IsDefaultValue": false,
+					"TechnicalValue": "2",
+					"IsSelected": false
+				},
+				{
+					"CsticId": "0000108305",
+					"ValueId": "0000000004",
+					"Description": "24h at seven days a week",
+					"IsDefaultValue": false,
+					"TechnicalValue": "3",
+					"IsSelected": false
+				}
+			]
+		},
+		"AVC_RBT_SPEED_GRP": {
+			"CsticId": "0000113304",
+			"Name": "AVC_RBT_SPEED_GRP",
+			"Description": "Speed",
+			"Unit": "",
+			"IsRequired": false,
+			"IsSingleValued": true,
+			"AssignedValues": {
+				"results": []
+			},
+			"DomainValues": [
+				{
+					"CsticId": "0000113304",
+					"ValueId": "0000000001",
+					"Description": "Standard Speed",
+					"IsDefaultValue": false,
+					"TechnicalValue": "STD",
+					"IsSelected": false
+				},
+				{
+					"CsticId": "0000113304",
+					"ValueId": "0000000002",
+					"Description": "Low Speed",
+					"IsDefaultValue": false,
+					"TechnicalValue": "LOW",
+					"IsSelected": false
+				},
+				{
+					"CsticId": "0000113304",
+					"ValueId": "0000000003",
+					"Description": "High Speed",
+					"IsDefaultValue": false,
+					"TechnicalValue": "HIGH",
+					"IsSelected": false
+				}
+			]
+		},
+		"AVC_RBT_APPLICATION": {
+			"CsticId": "0000108304",
+			"Name": "AVC_RBT_APPLICATION",
+			"Description": "Robot Application",
+			"Unit": "",
+			"IsRequired": false,
+			"IsSingleValued": true,
+			"AssignedValues": [
+				{
+					"CsticId": "0000108304",
+					"ValueId": "0000000001",
+					"Description": "Sealing",
+					"IsDefaultValue": false,
+					"TechnicalValue": "01",
+					"IsSelected": true
+				}
+			],
+			"DomainValues": [
+				{
+					"CsticId": "0000108304",
+					"ValueId": "0000000001",
+					"Description": "Sealing",
+					"IsDefaultValue": false,
+					"TechnicalValue": "01",
+					"IsSelected": true
+				},
+				{
+					"CsticId": "0000108304",
+					"ValueId": "0000000002",
+					"Description": "Painting",
+					"IsDefaultValue": false,
+					"TechnicalValue": "02",
+					"IsSelected": false
+				}
+			]
+		}
+	}
+}

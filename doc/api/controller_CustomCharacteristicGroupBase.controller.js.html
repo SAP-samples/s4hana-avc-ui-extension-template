@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: controller/CustomCharacteristicGroupBase.controller.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: controller/CustomCharacteristicGroupBase.controller.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>sap.ui.define([
+	"sap/ui/core/mvc/Controller",
+	"sap/i2d/lo/lib/vchclf/api/valuation/CustomDataConstants",
+	"sap/i2d/lo/lib/vchclf/common/util/Logger",
+	"sap/ui/core/Control",
+	"sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer"
+
+], function (Controller, CustomDataConstants, Logger, Control, CharacteristicContextContainer) {
+	"use strict";
+
+    /**
+     * Base controller for VC UI Extension views
+     *
+     * &lt;p>Provides generic Formatters and Event Handlers. Any custom controller must be derived from this class.&lt;/p>
+     *
+     * @public
+     * @author I517211
+     * @since 1.0.0
+     * @extends sap.ui.core.mvc.Controller
+     * 
+	 * @module sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase
+     */
+	return Controller.extend("sap.i2d.lo.lib.vchclf.api.valuation.controller.CustomCharacteristicGroupBase",  /** @alias module:sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase */  {
+		
+		_oCharacteristicGroupClientObject: null,
+		
+
+		/**
+		 * Sets the Characteristic Group Client Object for this controller - this can be used for further initialization in sub-classes
+		 * @param {sap.i2d.lo.lib.vchclf.api.valuation.CharacteristicGroupClientObject} oCharacteristicGroupClientObject - the Characteristic Group Client Object
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		setCharacteristicGroupClientObject: function(oCharacteristicGroupClientObject) {
+			this._oCharacteristicGroupClientObject = oCharacteristicGroupClientObject;
+		},
+		
+		/**
+		 * Returns the Characteristic Group Client Object
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 * @returns {sap.i2d.lo.lib.vchclf.api.valuation.CharacteristicGroupClientObject}
+		 */
+		getCharacteristicGroupClientObject: function() {
+			return this._oCharacteristicGroupClientObject;
+		},
+		
+		/**
+		 * Generic Event Handler - Switches the inspector to the Characteristic retrieved from the surrounding CustomCharacteristic control.
+		 * This event handler can be used on any control bound to a Characteristic object inside a CustomCharacteristic control.
+		 * @param {sap.ui.base.Event} oEvent - the event object
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		onShowInInspectorByCharcContext: function(oEvent) {
+			var oContextContainerControl = this.getCharacteristicContextContainer(oEvent.getSource());		
+			if (oContextContainerControl) {
+				this._oCharacteristicGroupClientObject.selectCharacteristic(oContextContainerControl.getName());
+			}
+		},
+		
+		/**
+		 * Generic Event Handler - Applies the given value represented by the bound Characteristic Value Object. This event handler can be used on any control
+		 * bound to a Characteristic Value object inside a CustomCharacteristic control. It requires a custom data object with key ‘action’ which specifies 
+		 * the assignment behaviour (select/deselect of the value). Custom data with key eventParameterCondition can optionally be specified to skip
+		 * the event processing if the condition is not fulfilled.
+		 * @param {sap.ui.base.Event} oEvent - the event object
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		onApplyByValueContext: function(oEvent) {	
+			var oContext = oEvent.getSource().getBindingContext("view");
+			if (oContext &amp;&amp; oContext.getObject() &amp;&amp; oContext.getObject().ValueId!==undefined) {
+				var sEventParameterCondition = oEvent.getSource().data(CustomDataConstants.EVENT_PARAMETER_CONDITION);
+				var aConditionsParts = sEventParameterCondition ? sEventParameterCondition.split("="): null;
+				if (aConditionsParts===null || aConditionsParts.length === 2 &amp;&amp; oEvent.getParameter(aConditionsParts[0])+"" === aConditionsParts[1]) {
+					var oValue = oContext.getObject();		
+					var sAction = oEvent.getSource().data(CustomDataConstants.ACTION);
+					if (sAction) {
+						var oRootControl = this.getCharacteristicRootControl(oEvent.getSource());
+						var oContextContainerControl = this.getCharacteristicContextContainer(oRootControl);
+						// if no control is found -> an error is already logged
+						if (oRootControl &amp;&amp; oContextContainerControl) {
+							var aTechnicalValues;
+							var oData = this._oCharacteristicGroupClientObject.getCharacteristicData(oContextContainerControl.getName());
+						
+							if (sAction === CustomDataConstants.ACTION_ENUM.SELECT) {
+								if (oData.IsSingleValued) {
+									aTechnicalValues = [oValue.TechnicalValue];
+								} else {
+									aTechnicalValues = oData.AssignedValues.map(function(oAssignedValue) {
+										return oAssignedValue.TechnicalValue;
+									});
+									// add the technical value of the not yet selected one
+									aTechnicalValues.push(oValue.TechnicalValue);
+								}
+							} else if (sAction === CustomDataConstants.ACTION_ENUM.DESELECT) {
+								if (oData.IsSingleValued) {
+									aTechnicalValues = [""];
+								} else {
+									aTechnicalValues = [];
+									// get technical values of all assigned but not the deselected one
+									oData.AssignedValues.forEach(function(oAssignedValue) {
+										if (oAssignedValue.TechnicalValue !== oValue.TechnicalValue) {
+											aTechnicalValues.push(oAssignedValue.TechnicalValue);
+										}
+									});
+								}
+							} else {
+								Logger.logError("Supplied value '{0}' is not valid for sap.ui.core.CustomData with key '", [CustomDataConstants.ACTION], this);
+							}
+							oRootControl.setBusyIndicatorDelay(0);
+							oRootControl.setBusy(true);
+							this._oCharacteristicGroupClientObject.selectCharacteristic(oContextContainerControl.getName());
+							this._oCharacteristicGroupClientObject.applyValues(oContextContainerControl, aTechnicalValues).finally(function() {
+								oRootControl.setBusy(false);
+							});
+						}	
+					} else {
+						Logger.logError("The 'onApplyByValueContext' function requires sap.ui.core.CustomData with key '{0}'.", [CustomDataConstants.ACTION], this);
+					}
+				} else {
+					Logger.logDebug("Skipping 'onApplyByValueContext'. Event condition '{0}' not fullfilled.", [sEventParameterCondition], this);
+				}
+			} else {
+				Logger.logError("The 'onApplyByValueContext' function can only be called from a template control which is used for an aggregation bound to Characteristic DomainValues. The layout control to which the aggregation belongs must be a child of a CharacteristicContextContainer.", [] , this);
+			}
+		},
+		
+		/**
+		 * Generic Event Handler - Applies the value retrieved from the event object field specified by custom data with key eventParameter. 
+		 * This event handler can be used on any control bound to a Characteristic object inside a CustomCharacteristic control. 
+		 * The custom data object with key ‘eventParameter’ is mandatory.
+		 * @param {sap.ui.base.Event} oEvent - the event object
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		onApplyByCharcContext: function(oEvent) {
+			var sEventParameter = oEvent.getSource().data(CustomDataConstants.EVENT_PARAMETER);
+			var inputValue = "";
+			if (sEventParameter) {
+				inputValue = oEvent.getParameter(sEventParameter);
+			} else {
+				Logger.logError("The 'onApplyByCharcContext' function requires sap.ui.core.CustomData with key '{0}'.", [CustomDataConstants.EVENT_PARAMETER], this);
+			}
+			
+			var oRootControl = this.getCharacteristicRootControl(oEvent.getSource());
+			var oContextContainerControl = this.getCharacteristicContextContainer(oRootControl);
+			if (oRootControl &amp;&amp; oContextContainerControl) {
+				oRootControl.setBusyIndicatorDelay(0);
+				oRootControl.setBusy(true);
+				this._oCharacteristicGroupClientObject.applyValues(oContextContainerControl, [inputValue+""]).finally(function() {
+					oRootControl.setBusy(false);
+				});
+			}
+		},
+		
+		/**
+		 * Generic Event Handler - Applies the default values. This event handler can be used on any control bound to a Characteristic object inside a CustomCharacteristic control.
+		 * @param {sap.ui.base.Event} oEvent - the event object
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		onApplyDefaultsByCharcContext: function(oEvent) {			
+			var oRootControl = this.getCharacteristicRootControl(oEvent.getSource());
+			var oContextContainerControl = this.getCharacteristicContextContainer(oRootControl);
+			if (oRootControl &amp;&amp; oContextContainerControl) {
+				this._oCharacteristicGroupClientObject.applyDefaultValues(oContextContainerControl).finally(function() {
+					oRootControl.setBusy(false);
+				});
+			}
+		},
+		
+		/**
+		 * Hook method for own refresh activities (in case of unbound visualizations) - this function is called whenever a refresh of the displayed controls is necessary. Reasons are:
+		 * After initial loading, after a value assignment, when filters have been applied. Characteristic data can be retrieved via
+		 * {@link module:sap/i2d/lo/lib/vchclf/api/valuation/CharacteristicGroupClientObject}
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		beforeRefresh: function() {
+			
+		},
+		
+		/**
+		 * Handles the CharacteristicAssignmentTriggered event. The implementation takes care that potentially necessary loading of
+		 * Domain Values for certain Characteristics is happening and included in the value assignment batch.
+		 * @param {string} sCsticName - name of the Characteristic for which an assignment has been triggered
+		 * @instance
+		 * @ignore
+		 */
+		onCharacteristicAssignmentTriggered: function(sCsticName) {
+			this._oCharacteristicGroupClientObject.loadDomainValuesForAllCustomControlsIfNeeded(this.getView(), true).finally(function() {
+				this._oCharacteristicGroupClientObject.refresh();
+			}.bind(this));
+		},
+		
+		/**
+		 * Handles the FilterApplied event. The implementation takes care that potentially necessary loading of
+		 * Domain Values for certain Characteristics is considered.
+		 * @instance
+		 * @ignore
+		 */
+		onFilterApplied: function() {
+			this._oCharacteristicGroupClientObject.loadDomainValuesForAllCustomControlsIfNeeded(this.getView()).finally(function() {
+				this._oCharacteristicGroupClientObject.refresh();
+			}.bind(this));
+		},
+		
+		/**
+		 * Retrieves the Characteristic Root Control (the first parent that is bound to a Characteristic) for the given child control (typically bound to a CharacteristicValue)
+		 * @param {sap.ui.core.Control} oControl - the control from which to bubble up
+		 * @returns {sap.ui.core.Control}
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		getCharacteristicRootControl: function(oControl) {
+			var oParam = oControl;
+			var oData;
+			
+			// bubble up to the control which has the Characteristic Context
+			while (oControl) {
+				oData = oControl.getBindingContext("view").getObject();
+				if (oData &amp;&amp; oData.__metadata.type.indexOf('Characteristic') === oData.__metadata.type.length - 'Characteristic'.length) {
+					return oControl;	
+				} else {
+					oControl = oControl.getParent ? oControl.getParent(): null;
+				}
+			}
+			Logger.logError("No characteristic root control found when traversing up from control '{0}'. The event handler '{1}' can only be used within a CharacteristicContextContainer control.", [oParam.getId(), sEventHandlerName], this);
+			return null;
+		},
+		
+		/**
+		 * Retrieves the CharacteristicContextContainer control for the given child control
+		 * @param {sap.ui.core.Control} oControl - the control from which to bubble up
+		 * @returns {module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer} 
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		getCharacteristicContextContainer: function(oControl) {
+			var oParam = oControl;
+			while (oControl) {
+				if (oControl instanceof CharacteristicContextContainer) {
+					return oControl;	
+				} else {
+					oControl = oControl.getParent();
+				}
+			}
+			Logger.logError("No CharacteristicContextContainer control found when traversing up from control '{0}'.", [oParam.getId()], this);
+			return null;
+		},
+		
+		/**
+		 * Generic formatters
+		 * @exports sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase/formatter
+		 * @instance
+		 * @public
+		 * @since 1.0.0
+		 */
+		formatter: {
+		
+			/**
+			 * Returns the content of the specified field from the first element of	the provided values array as number
+			 * @param {object[]} aValues - the values array
+			 * @param {string} sFieldName - the field to access
+			 * @public
+		 	 * @instance
+		 	 * @since 1.0.0
+			 * @returns {int}
+			 */
+			getNumericFieldOfFirstValue: function(aValues, sFieldName)  {
+				if (aValues &amp;&amp; aValues.length > 0) {
+					var oValue = aValues[0].ValueId !== "" ? aValues[0] : aValues[1];
+					var i = parseInt(oValue[sFieldName],10);
+					return isNaN(i) ? 0: i;
+				} else {
+					return 0;
+				}
+			},
+			
+			/**
+			 * Returns the content of the specified field from the last element of	the provided values array as number
+			 * @param {object[]} aValues - the values array
+			 * @param {string} sFieldName - the field to access
+			 * @public
+		 	 * @instance
+		 	 * @since 1.0.0
+			 * @returns {int}
+			 */
+			getNumericFieldOfLastValue: function(aValues, sFieldName)  {
+				if (aValues &amp;&amp; aValues.length > 0) {
+					var oValue = aValues[aValues.length-1];
+					var i = parseInt(oValue[sFieldName],10);
+					return isNaN(i) ? 0: i;
+				} else {
+					return 0;
+				}
+			},
+			
+			/**
+			 * Returns the content of the specified field from the first element of	the provided values array as text
+			 * @param {object[]} aValues - the values array
+			 * @param {string} sFieldName - the field to access
+			 * @returns {string}
+			 * @public
+		 	 * @instance
+		 	 * @since 1.0.0
+			 */
+			getTextFieldOfFirstValue: function(aValues, sFieldName)  {
+				if (aValues &amp;&amp; aValues.length > 0) {
+					var oValue = aValues[0].ValueId !== "" ? aValues[0] : aValues[1];
+					return oValue[sFieldName];
+				} else {
+					return null;
+				}
+			},
+			
+			/**
+			 * Returns the content of the specified field from the last element of	the provided values array as text
+			 * @param {object[]} aValues - the values array
+			 * @param {string} sFieldName - the field to access
+			 * @returns {string}
+			 * @public
+		 	 * @instance
+		 	 * @since 1.0.0
+			 */
+			getTextFieldOfLastValue: function(aValues, sFieldName)  {
+				if (aValues &amp;&amp; aValues.length > 0) {
+					var oValue = aValues[aValues.length-1];
+					return oValue[sFieldName];
+				} else {
+					return null;
+				}
+			},
+	
+			/**
+			 * Returns a deployment specific relative URL pointing to an image residing in the ‘img’ folder of the project
+			 * following this directory conventions:&lt;br>
+			 * &lt;code>+ Img&lt;/code>&lt;br>
+			 * &lt;code>..+ [Characteristic Name]&lt;/code>&lt;br>
+			 * &lt;code>....+ [TechnicalValue of Value].[suffix]&lt;/code>&lt;br>
+			 * @param {object} oValue - the value object
+			 * @param {string} sSuffix - the suffix to append
+			 * @returns {string}
+			 * @public
+		 	 * @instance
+		 	 * @since 1.0.0
+			 */
+			getImageResourceUrlForValue: function(oValue, sSuffix) {
+				if (this._oCharacteristicGroupClientObject) {
+					var sCsticName = this._oCharacteristicGroupClientObject.getCharacteristicName(oValue.CsticId);
+					if (sCsticName) {
+						var sTechnicalValue = oValue.TechnicalValue ? oValue.TechnicalValue : "none";
+						return this._oCharacteristicGroupClientObject.getResourceUrl("/img"+ "/" + sCsticName + "/" + sTechnicalValue + sSuffix);
+					} else {
+						return null;
+					}
+				}
+			},
+			
+			/**
+			 * Returns a deployment specific URL for the given relative path starting from the project root folder
+			 * @param {string} sPath - the path
+			 * @returns {string}
+			 * @public
+		 	 * @instance
+		 	 * @since 1.0.0
+			 */
+			getImageResourceUrl: function(sPath) {
+				if (this._oCharacteristicGroupClientObject) {
+					return this._oCharacteristicGroupClientObject.getResourceUrl(sPath);
+				}
+			},
+			
+			/**
+			 * Returns a localized text from the i18n resource model following the convention:&lt;br>
+			 * &lt;code[CharacteristicName].[TechnicalValue of Value] = My Sample Text&lt;/code>
+			 * @param {*} oValue 
+			 * @returns {string}
+			 * @public
+		 	 * @instance
+		 	 * @since 1.0.0
+			 */
+			getLocalizedTextForValue: function(oValue) {
+				if (this._oCharacteristicGroupClientObject) {
+					var sCsticName = this._oCharacteristicGroupClientObject.getCharacteristicName(oValue.CsticId);
+					var oRb = this.getView().getModel("customView_i18n").getResourceBundle();
+					return oRb.getText(sCsticName + "." + oValue.TechnicalValue);
+				}
+			}
+		
+		}
+	
+	});
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_CharacteristicGroupClientObject.html">sap/i2d/lo/lib/vchclf/api/valuation/CharacteristicGroupClientObject</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CharacteristicContextContainer.html">sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CustomCharacteristic.html">sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_StandardCharacteristic.html">sap/i2d/lo/lib/vchclf/api/valuation/control/StandardCharacteristic</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase.html">sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase_formatter.html">sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase/formatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Fri Jul 29 2022 11:46:35 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

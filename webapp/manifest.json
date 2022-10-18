@@ -1,0 +1,150 @@
+{
+	"_version": "1.40.0",
+	"sap.app": {
+		"id": "z.vc.ui.ext",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"applicationVersion": {
+			"version": "0.0.1"
+		},
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"resources": "resources.json",
+		"sourceTemplate": {
+			"id": "@sap-ux/fiori-freestyle-writer:basic",
+			"version": "0.11.15",
+			"toolsId": "3fd1517f-680c-435f-a88e-ef4a2a75484a"
+		}
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {
+			"icon": "",
+			"favIcon": "",
+			"phone": "",
+			"phone@2": "",
+			"tablet": "",
+			"tablet@2": ""
+		},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"flexEnabled": true,
+		"dependencies": {
+			"minUI5Version": "1.102.1",
+			"libs": {
+				"sap.m": {
+					
+				},
+				"sap.ui.core": {
+					
+				},
+				"sap.f": {
+					
+				},
+				"sap.suite.ui.generic.template": {
+					
+				},
+				"sap.ui.comp": {
+					
+				},
+				"sap.ui.generic.app": {
+					
+				},
+				"sap.ui.table": {
+					
+				},
+				"sap.ushell": {
+					
+				}
+			}
+		},
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+		"models": {
+			"customView_i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "z.vc.ui.ext.i18n.i18n"
+				}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "libs/api/launcher/css/style.css"
+				}
+			]
+		},
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"async": true,
+				"controlAggregation": "pages",
+				"controlId": "app",
+				"clearControlAggregation": false
+			},
+			"routes": [
+				{
+					"name": "Selector",
+					"pattern": "",
+					"target": [
+						"Selector"
+					]
+				},
+				{
+					"name": "RobotCommonData",
+					"pattern": "robot_commonData",
+					"target": [
+						"RobotCommonData"
+					]
+				},
+				{
+					"name": "RobotReach",
+					"pattern": "robot_reach",
+					"target": [
+						"RobotReach"
+					]
+				}
+			],
+			"targets": {
+				"Selector": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewId": "Selector",
+					"viewName": "sap.i2d.lo.lib.vchclf.api.launcher.view.Selector"
+				},
+				"RobotCommonData": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewId": "robot_commonData",
+					"viewName": "z.vc.ui.ext.view.robot_commonData",
+					"mockData": "mockdata/robot_commonData_cstics.json"
+				},
+				"RobotReach": {
+					"viewType": "XML",
+					"transition": "slide",
+					"clearControlAggregation": false,
+					"viewId": "robot_reach",
+					"viewName": "z.vc.ui.ext.view.robot_reach",
+					"mockData": "mockdata/robot_reach_cstics.json"
+				}
+			}
+		},
+		"rootView": {
+			"viewName": "sap.i2d.lo.lib.vchclf.api.launcher.view.App",
+			"type": "XML",
+			"async": true,
+			"id": "App"
+		}
+	}
+}

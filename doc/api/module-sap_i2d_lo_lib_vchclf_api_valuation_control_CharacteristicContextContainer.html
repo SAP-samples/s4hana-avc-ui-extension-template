@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Base class for controls bound to a Characteristic Context specified by its name. Child elements need to be placed in the default aggregation <code>content</code>. They automatically
+inherit a binding context with the name <code>view</code> which is actually bound to the Characteristic entity specified with property <code>name</code>.
+This class must not be used directly. See the sub-classes:
+<a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CustomCharacteristic.html">module:sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic</a>
+and 
+<a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_StandardCharacteristic.html">module:sap/i2d/lo/lib/vchclf/api/valuation/control/StandardCharacteristic</a></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-author">Author:</dt>
+    <dd class="tag-author">
+        <ul>
+            <li>I517211</li>
+        </ul>
+    </dd>
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="control_CharacteristicContextContainer.js.html">control/CharacteristicContextContainer.js</a>, <a href="control_CharacteristicContextContainer.js.html#line11">line 11</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>sap.ui.core.Control</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="content"><span class="type-signature"></span>content<span class="type-signature"> :sap.ui.core.Control</span></h4>
+
+
+
+
+<div class="description">
+    Aggregation - content
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">sap.ui.core.Control</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="control_CharacteristicContextContainer.js.html">control/CharacteristicContextContainer.js</a>, <a href="control_CharacteristicContextContainer.js.html#line37">line 37</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="keepDomainValues"><span class="type-signature"></span>keepDomainValues<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+<div class="description">
+    Property - Whether domain values can be kept in case of a value assignment (performance optimization for independent Characteristics) - optional, default is <code>false</code>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="control_CharacteristicContextContainer.js.html">control/CharacteristicContextContainer.js</a>, <a href="control_CharacteristicContextContainer.js.html#line86">line 86</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="loadDomainValues"><span class="type-signature"></span>loadDomainValues<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+<div class="description">
+    Property - Whether the container should load Domain Values - optional, default is <code>false</code>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="control_CharacteristicContextContainer.js.html">control/CharacteristicContextContainer.js</a>, <a href="control_CharacteristicContextContainer.js.html#line62">line 62</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    Property - Name of the Characteristic that should be displayed
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="control_CharacteristicContextContainer.js.html">control/CharacteristicContextContainer.js</a>, <a href="control_CharacteristicContextContainer.js.html#line51">line 51</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="removeNoneValue"><span class="type-signature"></span>removeNoneValue<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+<div class="description">
+    Property - Whether the 'None' value (to reset an assignment) should be removed from retrieved Domain Values  - optional, default is <code>false</code>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+    <dt class="tag-since">Since:</dt>
+    <dd class="tag-since"><ul class="dummy"><li>1.0.0</li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="control_CharacteristicContextContainer.js.html">control/CharacteristicContextContainer.js</a>, <a href="control_CharacteristicContextContainer.js.html#line74">line 74</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_CharacteristicGroupClientObject.html">sap/i2d/lo/lib/vchclf/api/valuation/CharacteristicGroupClientObject</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CharacteristicContextContainer.html">sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_CustomCharacteristic.html">sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_control_StandardCharacteristic.html">sap/i2d/lo/lib/vchclf/api/valuation/control/StandardCharacteristic</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase.html">sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase</a></li><li><a href="module-sap_i2d_lo_lib_vchclf_api_valuation_controller_CustomCharacteristicGroupBase_formatter.html">sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase/formatter</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Fri Jul 29 2022 11:46:35 GMT+0200 (Central European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

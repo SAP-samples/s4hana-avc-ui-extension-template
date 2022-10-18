@@ -1,0 +1,127 @@
+<!-- 
+  	This is a custom view for Characteristic Group 'AVC_RBT_COMMON' of Product 'AVC_RBT_ROBOT2'. Shown Characteristics are:
+    
+    AVC_RBT_SLA				Service level agreement
+    AVC_RBT_SPEED_GRP		Speed
+    AVC_RBT_APPLICATION		Robot Application
+
+	* The corresponding mockdata is found in ./mockdata/robot_commonData_cstics.json
+	* It illustrates a variety of custom Characteristic Representations using the 'CustomCharacteristic' control.
+ -->
+<mvc:View
+	controllerName="z.vc.ui.ext.controller.RobotCommonData"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc" 
+	xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout" 
+	xmlns:api="sap.i2d.lo.lib.vchclf.api.valuation.control"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	>
+	<html:style>
+      .hlayout .sapUiHLayoutChildWrapper {
+         vertical-align: bottom;
+      }
+       </html:style>
+	<VBox width="100%" class="sapUiSmallMargin">
+	
+		<!-- 
+			This represents the Custom Representation for Characteristic AVC_RBT_SLA. The Domain Values are represented as Buttons in a HorizontalLayout (therefore the 'loadDomainValues' flag equals 'true'). As this
+			Characteristic has no dependencies, the Domain Values can be kept ('keepDomainValues' equals 'true'). The value for unassign should not be rendered within the range of available Domain Values ('removeNoneValue' equals 'true).
+			For Visualization of the selected Value, the Button type is used. The selected value is rendered with type 'Emphasized'.
+		 -->
+		<api:CustomCharacteristic name="AVC_RBT_SLA" loadDomainValues="true" removeNoneValue="true" keepDomainValues="true">
+			<layout:VerticalLayout>
+				<!--  Represents the label of the Characteristic. Since it should also allow to switch the Inspector to the corresponding Characteristic, a Link Control is used. The 'press' event
+					  is therefore bound to the generic event handler function 'onShowInInspectorByCharcContext'. This function shows the Characteristic derived from the implicitly available 'view' context.
+                      Therefore it can only be used as event handler for controls that are bound to a Characteristic context.					  
+				 -->
+				<Link text="{view>Description}" press=".onShowInInspectorByCharcContext"/>
+				
+				<!-- The HorizontalLayout represents the root Control of this Characteristic (the root Control is the one that becomes busy during an assignment). The aggregation 'content' is bound to the Domain Values. -->
+				<layout:HorizontalLayout
+					content="{
+	        				path:'view>DomainValues'
+	    			}">
+					<layout:content>
+						<!-- The Button is used as Characteristic Value representation. When it is is pressed, the generic event handler function 'onApplyByValueContext' is called and
+						     the technical value derived from the given 'view' context (Characteristic Value entity) is assigned to this Characteristic. Via the CustomData the event
+						     handler is parametrized. The actual state in the context is used to differentiate whether a value should be assigned or unassigned.
+						 -->
+						<Button text="{view>Description}" press=".onApplyByValueContext" type="{= ${view>IsSelected} ? 'Emphasized' : 'Default' }" class="sapUiTinyMarginEnd">
+							<customData>
+								<core:CustomData key="action" value="{= ${view>IsSelected} ? 'deselect' : 'select' }"></core:CustomData>
+							</customData>
+						</Button>
+					</layout:content>
+				</layout:HorizontalLayout>
+			</layout:VerticalLayout>
+			<api:layoutData>
+				<FlexItemData styleClass="sapUiTinyMarginBottom"></FlexItemData>
+			</api:layoutData>
+		</api:CustomCharacteristic>
+		
+		<!-- 
+			This represents the Custom Representation for Characteristic AVC_RBT_SPEED_GRP. The Domain Values are represented as RadioButtons in a RadioButtonGroup (therefore the 'loadDomainValues' flag equals 'true'). As this
+			Characteristic has no dependencies, the Domain Values can be kept ('keepDomainValues' equals 'true'). The value for unassign should not be rendered within the range of available Domain Values ('removeNoneValue' equals 'true).
+			The Visualization of the selected Value happens via the 'selected' Property of the RadioButton. Note that a RadioButtonGroup can only be used for single-value Characteristics.
+		 -->
+		<api:CustomCharacteristic name="AVC_RBT_SPEED_GRP" loadDomainValues="true" removeNoneValue="true" keepDomainValues="true">
+			<layout:VerticalLayout>
+				<!--  Represents the label of the Characteristic. Since it should also allow to switch the Inspector to the corresponding Characteristic, a Link Control is used. The 'press' event
+					  is therefore bound to the generic event handler function 'onShowInInspectorByCharcContext'. This function shows the Characteristic derived from the implicitly available 'view' context.
+                      Therefore it can only be used as event handler for controls that are bound to a Characteristic context.					  
+				 -->
+				<Link text="{view>Description}" press=".onShowInInspectorByCharcContext"/>
+				
+				<!-- The RadioButtonGroup represents the root Control of this Characteristic (the root Control is the one that becomes busy during an assignment). The aggregation 'buttons' is bound to the Domain Values. -->
+				<RadioButtonGroup class="radioButtonGroup" width="100%"
+				   buttons= "{
+				       path:'view>DomainValues'
+					}">	
+					<!-- The RadioButton is used as Characteristic Value representation. When it is pressed, the generic event handler function 'onApplyByValueContext' is called and
+						     the technical value derived from the given 'view' context (Characteristic Value entity) is assigned to this Characteristic. Via the CustomData the event
+						     handler is parametrized. As a RadioButton becomes deselected by selecting another RadioButton, the action is always 'select'. The eventParameterCondition
+						     'selected=true' is an inbound condition for the event handler, as the 'select' is also called for the deselected RadioButtons.
+					-->			    			
+					<RadioButton text="{view>Description} {= ${view>IsDefaultValue} ? '*' : '' }" class="radioButton" selected="{view>IsSelected}" select=".onApplyByValueContext">
+						<customData>
+								<core:CustomData key="action" value="select"></core:CustomData>
+								<core:CustomData key="eventParameterCondition" value="selected=true"></core:CustomData>
+						</customData>
+					</RadioButton>
+				</RadioButtonGroup>
+			</layout:VerticalLayout>
+			<api:layoutData>
+				<FlexItemData styleClass="sapUiTinyMarginBottom"></FlexItemData>
+			</api:layoutData>
+		</api:CustomCharacteristic>
+		
+		<!-- 
+			This represents the Custom Representation for Characteristic AVC_RBT_APPLICATION. The actual value (given by 'view>AssignedValues/0') is rendered as Image. Therefore for each Characteristic
+			Value an image resides in the folder with the Characteristic Name below the general 'img' folder. The file name of the image must match the technical value string. For getting the concrete
+			resource URL, the formatter function 'getImageResourceUrlForValue' is used. Another value can be selected by using the provided Button which launches a ValueHelpDialog.
+		 -->
+		<api:CustomCharacteristic name="AVC_RBT_APPLICATION">
+			<layout:VerticalLayout>
+				<!--  Represents the label of the Characteristic. Since it should also allow to switch the Inspector to the corresponding Characteristic, a Link Control is used. The 'press' event
+					  is therefore bound to the generic event handler function 'onShowInInspectorByCharcContext'. This function shows the Characteristic derived from the implicitly available 'view' context.
+                      Therefore it can only be used as event handler for controls that are bound to a Characteristic context.					  
+				 -->
+				<Link text="{view>Description}" press=".onShowInInspectorByCharcContext"/>
+				
+				<!-- The HorizontalLayout represents the root Control of this Characteristic (the root Control is the one that becomes busy during an assignment). The 'content' aggregation holds an image
+					 representing the currently assigned value and a button which launches a custom Value Help Dialog (valueHelpDialogWithImage.fragment.xml).
+				-->
+				<layout:HorizontalLayout class="hlayout">	
+					<!-- Image for the currently assigned value -->
+					<Image width="100px" src="{
+								parts: ['view>AssignedValues/0','customView_i18n>IMG_URL_SUFFIX_PNG'],
+								formatter: '.formatter.getImageResourceUrlForValue' }">
+					</Image>
+					<!-- Button to launch a custom Value Help Dialog (valueHelpDialogWithImage.fragment.xml) -->
+					<Button text=".." press="onValueHelpRequest"></Button>
+				</layout:HorizontalLayout>
+			</layout:VerticalLayout> 
+		</api:CustomCharacteristic>
+	</VBox>
+</mvc:View>

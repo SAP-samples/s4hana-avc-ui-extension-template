@@ -1,0 +1,54 @@
+<!-- 
+  	This fragment contains a Dialog which represents an Assignment Summary for the Characteristic Group 'AVC_RBT_REACH' of Product 'AVC_RBT_ROBOT2'. It shows how Characteristic Data can be directly bound for
+  	readonly purpose without the need use the CustomCharacteristic control.
+ -->
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout"
+	xmlns:f="sap.ui.layout.form">
+	<Dialog title="{customView_i18n>ASSIGNMENT_SUMMARY}" contentWidth="300px" horizontalScrolling="false">
+		<VBox width="100%" class="sapUiSmallMargin">
+			<f:SimpleForm
+				editable="false"
+				layout="ResponsiveGridLayout"
+				singleContainerFullSize="true" >
+				<f:content>
+					<Label text="{view>Characteristics/AVC_RBT_RMIN_REQ/Description}" />
+					<Text text="{
+								parts: ['view>Characteristics/AVC_RBT_RMIN_REQ/AssignedValues','customView_i18n>FIELD_NAME_TECHNICAL_VALUE'],	
+							    formatter: '.formatter.getTextFieldOfFirstValue'}"/>
+					
+					<Label text="{view>Characteristics/AVC_RBT_RMAX_REQ/Description}" />
+					<Text text="{
+								parts: ['view>Characteristics/AVC_RBT_RMAX_REQ/AssignedValues','customView_i18n>FIELD_NAME_TECHNICAL_VALUE'],	
+							    formatter: '.formatter.getTextFieldOfFirstValue'}"/>
+					
+					<Label text="{view>Characteristics/AVC_RBT_RMIN_TECH/Description}" />
+					<Text text="{
+								parts: ['view>Characteristics/AVC_RBT_RMIN_TECH/AssignedValues','customView_i18n>FIELD_NAME_TECHNICAL_VALUE'],	
+							    formatter: '.formatter.getTextFieldOfFirstValue'}"/>
+					
+					<Label text="{view>Characteristics/AVC_RBT_RMAX_TECH/Description}" />
+					<Text text="{
+								parts: ['view>Characteristics/AVC_RBT_RMAX_TECH/AssignedValues','customView_i18n>FIELD_NAME_TECHNICAL_VALUE'],	
+							    formatter: '.formatter.getTextFieldOfFirstValue'}"/>
+					
+					<Label text="{view>Characteristics/AVC_RBT_LEN_DRIVEARM/Description}" />
+					<Text text="{
+								parts: ['view>Characteristics/AVC_RBT_LEN_DRIVEARM/AssignedValues','customView_i18n>FIELD_NAME_TECHNICAL_VALUE'],	
+							    formatter: '.formatter.getTextFieldOfFirstValue'}"/>
+					
+					<Label text="{view>Characteristics/AVC_RBT_LEN_LINKARM/Description}" />
+					<Text text="{
+								parts: ['view>Characteristics/AVC_RBT_LEN_LINKARM/AssignedValues','customView_i18n>FIELD_NAME_TECHNICAL_VALUE'],	
+							    formatter: '.formatter.getTextFieldOfFirstValue'}"/>
+				</f:content>
+			</f:SimpleForm>
+	
+		</VBox>
+		<endButton>
+			<Button text="{customView_i18n>CLOSE}" press="onPressDialogClose"></Button>
+		</endButton>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,16 @@
+/* ensure that the tokens are not too long */
+.sapVchclfMultiInput .sapMTokenizer .sapMToken {
+	max-Width: 150px!important;
+}
+
+.sapVchclfCsticFlexBox {
+    display: inline-flex!important;
+    vertical-align: baseline!important;
+    padding-right: 1rem;
+    max-width: 400px;
+}
+
+/* FlexItem containing MultiInput must have set an absolute width */
+.sapVchclfFlexItemInput{
+	width: 1px;
+}

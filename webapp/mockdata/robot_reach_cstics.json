@@ -1,0 +1,86 @@
+{
+	"Characteristics": {
+		"AVC_RBT_RMIN_TECH": {
+			"CsticId": "0000000839",
+			"Name": "AVC_RBT_RMIN_TECH",
+			"Description": "Reach (Minimum) - Technical",
+			"Unit": "",
+			"IsRequired": false,
+			"IsSingleValued": true,
+			"AssignedValues": [],
+			"DomainValues": []
+		},
+		"AVC_RBT_RMAX_TECH": {
+			"CsticId": "0000000837",
+			"Name": "AVC_RBT_RMAX_TECH",
+			"Description": "Reach (Maximum) - Technical",
+			"Unit": "",
+			"IsRequired": false,
+			"IsSingleValued": true,
+			"AssignedValues": [],
+			"DomainValues": []
+		},
+		"AVC_RBT_RMIN_REQ": {
+			"CsticId": "0000000838",
+			"Name": "AVC_RBT_RMIN_REQ",
+			"Description": "Reach (Minimum) - Requested",
+			"Unit": "",
+			"IsRequired": false,
+			"IsSingleValued": true,
+			"AssignedValues": [],
+			"DomainValues": [
+				{
+					"CsticId": "0000000838",
+					"ValueId": "1",
+					"Description": "",
+					"IsDefaultValue": false,
+					"TechnicalValueFrom": "5",
+					"TechnicalValueTo": "190",
+					"TechnicalValue": ">=5 - <=190",
+					"IsSelected": false
+				}
+			]
+		},
+		"AVC_RBT_RMAX_REQ": {
+			"CsticId": "0000000836",
+			"Name": "AVC_RBT_RMAX_REQ",
+			"Description": "Reach (Maximum) - Requested",
+			"Unit": "",
+			"IsRequired": false,
+			"IsSingleValued": true,
+			"AssignedValues": [],
+			"DomainValues": [
+				{
+					"CsticId": "0000000838",
+					"ValueId": "1",
+					"Description": "",
+					"IsDefaultValue": false,
+					"TechnicalValueFrom": "5",
+					"TechnicalValueTo": "190",
+					"TechnicalValue": ">=5 - <=190",
+					"IsSelected": false
+				}
+			]
+		},
+		"AVC_RBT_LEN_DRIVEARM": {
+			"CsticId": "0000000833",
+			"Name": "AVC_RBT_LEN_DRIVEARM",
+			"Description": "Length of Drive Arm",
+			"Unit": "",
+			"IsRequired": true,
+			"IsSingleValued": true,
+			"AssignedValues": [],
+			"DomainValues": []
+		},
+		"AVC_RBT_LEN_LINKARM": {
+			"CsticId": "0000000834",
+			"Name": "AVC_RBT_LEN_LINKARM",
+			"Description": "Length of Link Arm",
+			"Unit": "",
+			"IsRequired": true,
+			"IsSingleValued": true,
+			"AssignedValues": [],
+			"DomainValues": []
+		}
+	}
+}

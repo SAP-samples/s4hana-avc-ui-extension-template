@@ -1,0 +1,32 @@
+<!-- 
+  	This fragment contains a SelectedDialog which represents a custom Value Help including an image for each Characteristic Value. Images for Characteristic Values must be put in a folder with the Characteristic name below the 'img' folder. The
+  	name of each file needs to match the technical value. In the given sample it is used for Characteristic 'AVC_RBT_APPLICATION'. Nevertheless this fragment can be used generically. It only needs to be ensured, that the custom 
+  	event handler implementation ('onValueHelpDialogClose' in 'RobotCommonData.controller.js') is available.
+ -->
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+	xmlns:layout="sap.ui.layout">
+	<SelectDialog contentWidth="300px" contentHeight="600px"
+		noDataText="Nothing found"
+		title="Select"
+		search=".onSearch"
+		confirm=".onValueHelpDialogClose"
+		cancel=".onValueHelpDialogClose"
+		items="{
+			path: 'view>DomainValues'
+		}">
+		<CustomListItem selected="{view>IsSelected}">
+			<layout:VerticalLayout class="sapUiTinyMargin">
+				<Title text="{view>Description}" class="sapUiTinyMarginBottom"/>
+				<Text text="{
+					parts: ['view>'],
+					formatter: '.formatter.getLocalizedTextForValue'
+				}" class="sapUiTinyMarginBottom"/>
+				<Image height="200px" src="{
+				parts: ['view>','customView_i18n>IMG_URL_SUFFIX_PNG'],
+				formatter: '.formatter.getImageResourceUrlForValue' }" class="sapUiTinyMarginBottom"/>
+			</layout:VerticalLayout>
+		</CustomListItem>
+	</SelectDialog>
+</core:FragmentDefinition>

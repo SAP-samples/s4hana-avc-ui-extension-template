@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+
+	This is a cutout of the complete metadata of the VCHCLF OData Service. 
+	It shows the 'CharacteristicValue' entity. The mentioned properties represent 
+	the public subset of the available ones.
+	
+-->
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata"
+	xmlns:sap="http://www.sap.com/Protocols/SAPData">
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_AGGREGATION',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="Org.OData.Aggregation.V1" Alias="Aggregation" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_ANALYTICS',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="com.sap.vocabularies.Analytics.v1" Alias="Analytics" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CAPABILITIES',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="Org.OData.Capabilities.V1" Alias="Capabilities" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_CODELIST',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="com.sap.vocabularies.CodeList.v1" Alias="SAP__CodeList" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMON',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="com.sap.vocabularies.Common.v1" Alias="Common" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_COMMUNICATION',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="com.sap.vocabularies.Communication.v1" Alias="Communication" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_MEASURES',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="Org.OData.Measures.V1" Alias="Measures" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_PERSONALDATA',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="com.sap.vocabularies.PersonalData.v1" Alias="PersonalData" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_UI',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="com.sap.vocabularies.UI.v1" Alias="UI" />
+	</edmx:Reference>
+	<edmx:Reference
+		Uri="https://ldai1er9.wdf.sap.corp:44300/sap/opu/odata/iwfnd/catalogservice;v=2/Vocabularies(TechnicalName='%2FIWBEP%2FVOC_VALIDATION',Version='0001',SAP__Origin='LOCAL')/$value"
+		xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+		<edmx:Include Namespace="Org.OData.Validation.V1" Alias="Validation" />
+	</edmx:Reference>
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema Namespace="LO_VCHCLF" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+			<EntityType Name="CharacteristicValue" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="ContextId" />
+					<PropertyRef Name="InstanceId" />
+					<PropertyRef Name="GroupId" />
+					<PropertyRef Name="CsticId" />
+					<PropertyRef Name="ValueId" />
+				</Key>
+				<Property Name="ContextId" Type="Edm.String" Nullable="false" MaxLength="400" sap:unicode="false" sap:label="Context Id" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="InstanceId" Type="Edm.String" Nullable="false" MaxLength="90" sap:unicode="false" sap:label="Object" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="GroupId" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:label="Number" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="CsticId" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Internal char." sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="ValueId" Type="Edm.String" Nullable="false" MaxLength="75" sap:unicode="false" sap:label="Char. Value ID" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="UnitFrom" Type="Edm.String" MaxLength="6" sap:unicode="false" sap:label="Int. Unit Meas." sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="UnitTo" Type="Edm.String" MaxLength="6" sap:unicode="false" sap:label="Int. Unit Meas." sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="Currency" Type="Edm.String" MaxLength="5" sap:unicode="false" sap:label="Currency" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" sap:semantics="currency-code" />
+				<Property Name="Description" Type="Edm.String" MaxLength="70" sap:unicode="false" sap:label="Description" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="IsDefaultValue" Type="Edm.Boolean" sap:unicode="false" sap:label="Is Default Value" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />			
+				<Property Name="IsSetByObjectDependency" Type="Edm.Boolean" sap:unicode="false" sap:label="Set by Object Depende" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="FormattedValueFrom" Type="Edm.String" MaxLength="70" sap:unicode="false" sap:label="Formatted Value from" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="FormattedValueTo" Type="Edm.String" MaxLength="70" sap:unicode="false" sap:label="Formatted Value to" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="TechnicalValueFrom" Type="Edm.String" MaxLength="70" sap:unicode="false" sap:label="Technical Value from" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="TechnicalValueTo" Type="Edm.String" MaxLength="70" sap:unicode="false" sap:label="Technical Value to" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="TechnicalValue" Type="Edm.String" MaxLength="150" sap:unicode="false" sap:label="Technical Value" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />	
+				<Property Name="IsSelected" Type="Edm.Boolean" sap:unicode="false" sap:label="Is Selected" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="SortKey" Type="Edm.Int32" sap:unicode="false" sap:label="Sort Key" sap:creatable="false" sap:updatable="false" sap:filterable="false" />
+				
+				<!-- THESE PROPERTIES MUST BE TREATED PRIVATE
+				
+				<Property Name="IntervalType" Type="Edm.String" MaxLength="1" sap:unicode="false" sap:label="Code" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="HasLongText" Type="Edm.Boolean" sap:unicode="false" sap:label="TRUE" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="IsInconsistent" Type="Edm.Boolean" sap:unicode="false" sap:label="TRUE" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="DepObjNumber" Type="Edm.String" MaxLength="18" sap:unicode="false" sap:label="Dependency object number" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="IsExcluded" Type="Edm.Boolean" sap:unicode="false" sap:label="Is Excluded Value" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="ExclusionType" Type="Edm.Int32" sap:unicode="false" sap:label="Exclusion Type" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="IsReadonly" Type="Edm.Boolean" sap:unicode="false" sap:label="Is Readonly" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="IsProposal" Type="Edm.Boolean" sap:unicode="false" sap:label="Is Proposal" sap:creatable="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false" />
+				<Property Name="ProposalConfidence" Type="Edm.Decimal" Precision="3" Scale="0" sap:unicode="false" sap:label="Proposal Confidence" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="HasHighPrecision" Type="Edm.Boolean" sap:unicode="false" sap:label="Has High Precision" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false" />
+				<Property Name="TechnicalValueDisplay" Type="Edm.String" MaxLength="400" sap:unicode="false" sap:label="Technical Value Display" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="IsMasterDataValue" Type="Edm.Boolean" sap:unicode="false" sap:label="Is Master Data Value" sap:creatable="false" sap:updatable="false" />
+				<NavigationProperty Name="to_ObjectDependencyHeaders" Relationship="LO_VCHCLF.CharacteristicValueToDependencies"
+					FromRole="FromRole_CharacteristicValueToDependencies" ToRole="ToRole_CharacteristicValueToDependencies" />
+				<NavigationProperty Name="to_CharacteristicValueDetail" Relationship="LO_VCHCLF.CharacteristicValueToValueDetail"
+					FromRole="FromRole_CharacteristicValueToValueDetail" ToRole="ToRole_CharacteristicValueToValueDetail" />
+				
+				-->
+				
+			</EntityType>
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>
