@@ -87,5 +87,5 @@ After the UI Extension Object has been saved, it can be attached to a Characteri
 The generic Event Handlers of the <code>sap.i2d.lo.lib.vchclf.api.valuation.controller.CustomCharacteristicGroupBase</code> controller can be applied to most of the UI5 Control events. However there may be situations in which none of the generic handlers can be applied properly. In these cases an own event handler implementation becomes necessary. This can be done in an own controller derived from the CustomCharacteristicGroupBase controller - see the samples.
 
 # How to obtain support
-[Create an issue](./issues) in this repository if you find a bug or have questions about the content.
+[Create an issue](https://github.com/SAP-samples/s4hana-avc-ui-extension-template/issues) in this repository if you find a bug or have questions about the content.
 
