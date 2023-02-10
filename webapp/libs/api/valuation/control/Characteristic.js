@@ -17,6 +17,13 @@ sap.ui.define([
 	], function (FlexBox, FlexBoxRenderer, Input, MultiInput, Column, ColumnListItem, Token, Select, Label, Item, Component) {
 	"use strict";
 
+	/**
+     * This class represents the origin characteristic implementation in the mock launcher
+	 * 
+     * @author I517211
+     * @extends module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer
+     * @ignore
+     */
 	return FlexBox.extend("sap.i2d.lo.lib.vchclf.api.valuation.control.Characteristic", {
 		
 		constructor: function (mSettings) {
