@@ -18,7 +18,6 @@ sap.ui.define([
 	 * provided ones are not sufficient.
      *
      * @public
-     * @author I517211
      * @since 1.0.0
      * @extends sap.ui.core.ManagedObject
      * 

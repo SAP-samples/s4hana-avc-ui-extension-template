@@ -13,7 +13,6 @@ sap.ui.define([
      * <p>Provides generic Formatters and Event Handlers. Any custom controller must be derived from this class.</p>
      *
      * @public
-     * @author I517211
      * @since 1.0.0
      * @extends sap.ui.core.mvc.Controller
      * 

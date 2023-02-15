@@ -20,7 +20,6 @@ sap.ui.define([
 	/**
      * This class represents the origin characteristic implementation in the mock launcher
 	 * 
-     * @author I517211
      * @extends module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer
      * @ignore
      */

@@ -47,7 +47,6 @@ sap.ui.define([
 	 * provided ones are not sufficient.
      *
      * @public
-     * @author I517211
      * @since 1.0.0
      * @extends sap.ui.core.ManagedObject
      * 
@@ -57,7 +56,6 @@ sap.ui.define([
 
 		_oValuationClientObjectManager: null,
 		_oContext: null,
-		_oOriginContext: null,
 		_mCsticId2Name: null,
 		_mCsticControls: null,
 		_sNamespace: null,
@@ -66,21 +64,21 @@ sap.ui.define([
 		constructor: function(oValuationClientObjectManager, oContext) {
 			ManagedObject.prototype.constructor.apply(this);
 			this._oValuationClientObjectManager = oValuationClientObjectManager;
-			this._oOriginContext = oContext;
-			var sPath = oContext.getPath();
-			sPath = sPath.replace(/CharacteristicsGroups/g, "CharacteristicsGroupsCustom");
-			var oViewModel = this._oValuationClientObjectManager.getValuationComponent().getModel("view");
-			this._oContext = oViewModel.createBindingContext(sPath);
+			this._oContext = oContext;
 			this._mCsticControls = {};
 			this._mCsticId2Name = {};
 			this._oValuationClientObjectManager.getValuationComponent().attachCharacteristicAssignmentTriggered(this.onCharacteristicAssignmentTriggered, this);
 			this._oValuationClientObjectManager.getValuationComponent().attachFilterApplied(this.onFilterApplied, this);
+			this._oValuationClientObjectManager.getValuationComponent().attachCharacteristicsCleared(this.onCharacteristicsCleared, this);
+			var oViewModel = this._oValuationClientObjectManager.getValuationComponent().getModel("view");
 			oViewModel.attachCustomGroupTransformed(this.onCustomGroupTransformed, this);
 		},
 		
 		destroy: function() {
 			this._oValuationClientObjectManager.getValuationComponent().detachCharacteristicAssignmentTriggered(this.onCharacteristicAssignmentTriggered, this);
 			this._oValuationClientObjectManager.getValuationComponent().detachFilterApplied(this.onFilterApplied, this);
+			this._oValuationClientObjectManager.getValuationComponent().detachCharacteristicsCleared(this.onCharacteristicsCleared, this);
+			var oViewModel = this._oValuationClientObjectManager.getValuationComponent().getModel("view");
 			oViewModel.detachCustomGroupTransformed(this.onCustomGroupTransformed, this);
 			
 			ManagedObject.prototype.destroy.apply(this);
@@ -93,15 +91,6 @@ sap.ui.define([
 		 */
 		getCustomGroupContext: function() {
 			return this._oContext;
-		},
-		
-		/**
-		 * Returns the standard group context
-		 * @returns {object}
-		 * @ignore
-		 */
-		getOriginGroupContext: function() {
-			return this._oOriginContext;
 		},
 		
 		/**
@@ -130,23 +119,6 @@ sap.ui.define([
 				return oGroup.Characteristics[sCsticName];
 			} else {
 				return null;
-			}
-		},
-		
-		/**
-		 * Returns the index of the given Characteristic in the origin context
-		 * @param {string} sCsticName 
-		 * @returns {int}
-		 * @ignore
-		 */
-		_getCharacteristicIndex: function(sCsticName) {
-			var oGroup = this._oOriginContext.getObject();
-			if (oGroup.Characteristics) {
-				return oGroup.Characteristics.findIndex(function(oCstic) {
-					return oCstic.Name === sCsticName;
-				});
-			} else {
-				return -1;
 			}
 		},
 		
@@ -196,6 +168,7 @@ sap.ui.define([
 		setCustomCharacteristicControl: function(oControl) {
 			this._mCsticControls[oControl.getRegistrationId()] = oControl;
 			this.getValuationComponent().getModel("view").setKeepDomainValues(oControl.getName(), oControl.getKeepDomainValues());
+			this.getValuationComponent().getModel("view").setRemoveNoneValue(oControl.getName(), oControl.getRemoveNoneValue());
 		},
 		
 		/**
@@ -260,13 +233,13 @@ sap.ui.define([
 					sCsticId = oGroup.Characteristics[name].CsticId;
 					this._mCsticId2Name[sCsticId] = name;
 				}
-				
+
 				var sCstic;
 			
 				for (var sControlId in this._mCsticControls) {
 					sCstic = this._mCsticControls[sControlId].getName();
 					// cstic is filtered out -> set control invisible
-					if (!this.getCharacteristicData(sCstic) || this.getCharacteristicData(sCstic).IsHidden) {
+					if (!this.getCharacteristicData(sCstic)) {
 						this._mCsticControls[sControlId].setVisible(false);
 						this._mCsticControls[sControlId].getParent().rerender();
 					} else {
@@ -324,18 +297,9 @@ sap.ui.define([
 		 * @since 1.0.0
 		 */
 		loadDomainValues: function(oControl) {
-			var iCsticIndex = this._getCharacteristicIndex(oControl.getName());
-			var oCsticInOriginContext = this._oOriginContext.getObject().Characteristics[iCsticIndex];
-			var oPromise = this.getValuationComponent().getValuationDAO().loadAlternativeValues(oCsticInOriginContext);
-			oPromise.then(function() {
-				if (oControl.getRemoveNoneValue()) {
-					var aDomainValues = oControl.getBindingContext("view").getObject().DomainValues;
-					if (aDomainValues[0].ValueId==="") {
-						aDomainValues.splice(0,1);
-					}
-				}
-			}.bind(this));
-			return oPromise;
+			var oCharacteristicData = this.getCharacteristicData(oControl.getName());
+			var oViewModel = this._oValuationClientObjectManager.getValuationComponent().getModel("view");
+			return oViewModel.loadAlternativeValuesForCharacteristic(oCharacteristicData);
 		},
 		
 		/**
@@ -382,27 +346,6 @@ sap.ui.define([
 				if (this._oController &amp;&amp; this._oController.beforeRefresh) {
 					this._oController.beforeRefresh();
 				}
-				// refresh all custom group bindings to force formatters to run again when all data is there 
-				this._suspendOrResumeCustomGroupBindings(false);
-			}.bind(this));
-		},
-		
-		/**
-		 * Suspend or resumes all bindings that have &lt;code>CharacteristicsGroupsCustom&lt;/code> in their path
-		 * @param {boolean} bSuspend - &lt;code>true&lt;/code> in case of suspend, &lt;code>false&lt;/code> means resume
-		 * @instance
-		 * @ignore
-		 */
-		_suspendOrResumeCustomGroupBindings: function(bSuspend) {
-			var aBindings = this.getValuationComponent().getModel("view").getBindings();
-			aBindings.forEach(function(oBinding) {
-				if (oBinding.getContext() &amp;&amp; oBinding.getContext().getPath().indexOf("CharacteristicsGroupsCustom") > -1) {
-					if (bSuspend) {
-						oBinding.suspend();
-					} else {
-						oBinding.resume();
-					}
-				}
 			}.bind(this));
 		},
 		
@@ -415,7 +358,7 @@ sap.ui.define([
 		onCustomGroupTransformed: function(oEvent) {
 			var oGroup = oEvent.getParameter("group");
 			var bChanged = oEvent.getParameter("changed");
-			if (oGroup.GroupId === this._oOriginContext.getObject().GroupId &amp;&amp; bChanged) {
+			if (oGroup.GroupId === this._oContext.getObject().GroupId &amp;&amp; ($.isEmptyObject(this._mCsticId2Name) || bChanged)) {
 				this.initCsticsMap();
 			}
 		},
@@ -428,8 +371,21 @@ sap.ui.define([
 		 */
 		onFilterApplied: function(oEvent) {
 			var iGroupId = oEvent.getParameter("groupId");
-			if (this.getCustomGroupContext().getObject() &amp;&amp; this.getCustomGroupContext().getObject().GroupId === iGroupId) {
+			if (this._oController &amp;&amp; this.getCustomGroupContext().getObject() &amp;&amp; this.getCustomGroupContext().getObject().GroupId === iGroupId) {
 				this._oController.onFilterApplied();
+			}
+		},
+
+		/**
+		 * Eventhandler for the 'characteristicsCleared' event of the Valuation Component. Used to inform the controller about a characteristics clearing (revoke of all user assignments) to then potentially reload Domain Values.
+		 * @param {sap.ui.base.Event} oEvent - the Event object
+		 * @instance
+		 * @ignore
+		 */
+		onCharacteristicsCleared: function(oEvent) {
+			var iGroupId = oEvent.getParameter("groupId");
+			if (this._oController &amp;&amp; this.getCustomGroupContext().getObject() &amp;&amp; this.getCustomGroupContext().getObject().GroupId === iGroupId) {
+				this._oController.onCharacteristicsCleared();
 			}
 		},
 		
@@ -447,8 +403,6 @@ sap.ui.define([
 			var sCharacteristicPath = oEvent.getParameter("characteristicPath");
 			var oCharacteristicData = this.getValuationComponent().getModel("vchclf").getProperty(sCharacteristicPath);
 			if (this._oController &amp;&amp; this._oController.onCharacteristicAssignmentTriggered &amp;&amp; this._mCsticId2Name[oCharacteristicData.CsticId]) {
-				// suspend custom group bindings until refresh is explictely called
-				this._suspendOrResumeCustomGroupBindings(true);
 				this._oController.onCharacteristicAssignmentTriggered(oCharacteristicData.Name);
 			}
 		}
@@ -472,7 +426,7 @@ sap.ui.define([
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Fri Jul 29 2022 11:46:35 GMT+0200 (Central European Summer Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.11</a> on Wed Feb 15 2023 08:44:57 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

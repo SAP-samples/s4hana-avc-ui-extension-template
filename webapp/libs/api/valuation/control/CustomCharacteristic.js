@@ -15,7 +15,6 @@ sap.ui.define([
 	 * is called.
      *
      * @public
-     * @author I517211
      * @since 1.0.0
      * @extends module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer
      * 
