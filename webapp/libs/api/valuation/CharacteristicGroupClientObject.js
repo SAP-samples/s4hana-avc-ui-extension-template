@@ -13,8 +13,8 @@ sap.ui.define([
 	 * {@link module:sap/i2d/lo/lib/vchclf/api/valuation/controller/CustomCharacteristicGroupBase}
      * ) owns an instance of this object and has access. It allows to retrieve Characteristic data independent of the context to
 	 * which a {@link module:sap/i2d/lo/lib/vchclf/api/valuation/control/CustomCharacteristic}
-	 * is bound. Furthermore loading of Domain Values can be manally triggered (e.g. for an custom Value Help implementation) and
-	 * value assignments can be made. This is especially helpfull when it comes to own event handler implementations if the
+	 * is bound. Furthermore loading of Domain Values can be manually triggered (e.g. for an custom Value Help implementation) and
+	 * value assignments can be made. This is especially helpful when it comes to own event handler implementations if the
 	 * provided ones are not sufficient.
      *
      * @public

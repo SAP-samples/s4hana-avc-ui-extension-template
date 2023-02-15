@@ -50,7 +50,7 @@ sap.ui.define([
 					type: "string"
 				},
 				/**
-				 * Property - Whether the container should load Domain Values - optional, default is <code>false</code>
+				 * Property - Whether the container should load Domain Values with the loading of characteristics - optional, default is <code>false</code>
 				 * @memberOf module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer
 				 * @type boolean
 				 * @instance
@@ -74,7 +74,7 @@ sap.ui.define([
 					default: false
 				},
 				/**
-				 * Property - Whether domain values can be kept in case of a value assignment (performance optimization for independent Characteristics) - optional, default is <code>false</code>
+				 * Property - Whether domain values are only loaded once and not updated in case of a value assignment (performance optimization for independent Characteristics) - optional, default is <code>false</code>
 				 * @memberOf module:sap/i2d/lo/lib/vchclf/api/valuation/control/CharacteristicContextContainer
 				 * @type boolean
 				 * @instance

@@ -3,7 +3,7 @@
 An UI Extension implementation starts with the creation a new UI5 XML View that refers to the <code>sap.i2d.lo.lib.vchclf.api.valuation.controller.CustomCharacteristicGroupBase</code> controller. In the next step Layout Containers are inserted and the [StandardCharacteristic](IMPLEMENTATION.md#the-standardcharacteristic-control) and [CustomCharacteristic](IMPLEMENTATION.md#the-customcharacteristic-control) control are placed and bound to the corresponding Characteristics.
 
 > ### Attention - Namespace adoptions
-> - When the namespace of the template is changed according to own name schemas, it need to be considered that the namespace is represented with <code>.</code> and <code>/</code> notation as separation marker. This depends on the location of the specific defintion.
+> - When the namespace of the template is changed according to own name schemas, it needs to be considered that the namespace is represented with <code>.</code> and <code>/</code> notation as separation marker. This depends on the location of the specific defintion.
 
 ## Display and Edit scenario
 
