@@ -59,6 +59,8 @@ For deployment the project needs to be built using <code>ui5 build</code>. The r
 > ### Attention
 > - Be aware that you do not share the namespace over different UI extension projects. Running multiple UI Extensions from different deployment units with the same namespace at the same time (within one Product Configuration Model) is not possible.
 > - The provided sample views refer to the product <code>AVC_RBT_ROBOT2</code> which is part of the 'SAP Best Practices for SAP S/4HANA Cloud' package. In order to make use of the product in the **Simulate Configuration Models** app, it must be activated.
+> - The sources in the <code>libs</code> folder of the template project are necessary to provide the mock runtime for local usage - they are excluded from the build.
+> - The <code>Component.js</code> file in the root of the project is also only used in local mock runtime mode - it must not be changed and is not relevant at "real" runtime (only the view which is specified within an UI Extension registration is injected into the valuation screen).
 
 The necessary steps for deployment depends on the installation type:
 

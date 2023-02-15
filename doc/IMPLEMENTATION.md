@@ -2,6 +2,9 @@
 
 An UI Extension implementation starts with the creation a new UI5 XML View that refers to the <code>sap.i2d.lo.lib.vchclf.api.valuation.controller.CustomCharacteristicGroupBase</code> controller. In the next step Layout Containers are inserted and the [StandardCharacteristic](IMPLEMENTATION.md#the-standardcharacteristic-control) and [CustomCharacteristic](IMPLEMENTATION.md#the-customcharacteristic-control) control are placed and bound to the corresponding Characteristics.
 
+> ### Attention - Namespace adoptions
+> - When the namespace of the template is changed according to own name schemas, it needs to be considered that the namespace is represented with <code>.</code> and <code>/</code> notation as separation marker. This depends on the location of the specific defintion.
+
 ## Display and Edit scenario
 
 The Valuation Panel is used in Display (read-only) and Edit mode. By default the runtime uses for a Characteristic Group with an UI Extension attached in the Display scenario the standard rendering (means the custom view is only used in Edit scenario). The main reason is, that in the display case no Domain Values are available. Nevertheless it is possible to provide a dedicated (read-only) Display variant of a custom view for a Characteristic Group. This works by following the below mentioned naming convention:
@@ -14,6 +17,10 @@ In the UI Extension for field <i>Implementation</i> the full qualified name of t
 ## API Documentation
 
 The JSDoc describing the API objects is found [here](./api/index.html).
+
+## Inheritence and Composition of API Objects
+
+![Image](./images/plain_apiObjects.png)
 
 ## The StandardCharacteristic control
 
