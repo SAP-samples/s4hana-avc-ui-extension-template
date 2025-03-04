@@ -18,7 +18,7 @@ With an UI Extension it is possible to replace the standard view for a Character
 
 This template project can be used to create VC UI Extensions that run with Advanced Variant Configruation on SAP S/4HANA 2302. For development this project requires a local installation of an active NodeJS LTS (Long Term Support) version and associated supported NPM version. See https://nodejs.org. Additionally the [UI5 CLI Tools](https://sap.github.io/ui5-tooling/pages/CLI/) must be installed globally <code>npm install --global @ui5/cli</code>.
 
-## Contribution
+## Contributing
 
 If you wish to contribute code, offer fixes or improvements, please send a pull request. Due to legal reasons, contributors will be asked to accept a DCO when they create the first pull request to this project. This happens in an automated fashion during the submission process. SAP uses [the standard DCO text of the Linux Foundation](https://developercertificate.org/).
 
