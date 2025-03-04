@@ -1,3 +1,5 @@
+[![REUSE status](https://api.reuse.software/badge/github.com/SAP-samples/s4hana-avc-ui-extension-template)](https://api.reuse.software/info/github.com/SAP-samples/s4hana-avc-ui-extension-template)
+
 # Variant Configuration (VC) UI Extension Template Project
 
 This repository contains code samples that illustrate how to write a VC UI Extension. It also includes a mock runtime to test VC UI Extensions locally without having the need to build and deploy an archive.
